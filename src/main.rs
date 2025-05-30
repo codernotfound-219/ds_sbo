@@ -1,6 +1,4 @@
-use ds_sbo_rust::batch::Batch;
-use ds_sbo_rust::job::Job;
-use ds_sbo_rust::batch_schedule::BatchSchedule;
+use ds_sbo_rust::structures::{Job, Batch, BatchSchedule};
 
 fn main() {
     let job1 = Job::new(1, 1, 29, 9, 9);

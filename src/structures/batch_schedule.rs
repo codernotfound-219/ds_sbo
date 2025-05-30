@@ -1,4 +1,4 @@
-use crate::batch::Batch;
+use crate::structures::batch::Batch;
 
 pub struct BatchSchedule {
     pub batches: Vec<Batch>,

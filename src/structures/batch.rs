@@ -1,4 +1,4 @@
-use crate::job::Job;
+use crate::structures::job::Job;
 use std::fmt;
 
 #[derive(Debug)]

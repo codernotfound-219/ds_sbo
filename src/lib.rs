@@ -1,3 +1,1 @@
-pub mod job;
-pub mod batch;
-pub mod batch_schedule;
+pub mod structures;
