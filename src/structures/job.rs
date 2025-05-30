@@ -1,3 +1,5 @@
+use std::fmt;
+
 #[derive(Debug)]
 pub struct Job {
     pub code: u32,
@@ -16,5 +18,21 @@ impl Job {
             processing_time: pt,
             size,
         }
+    }
+
+    pub fn sort_release_date(list: &mut Vec<Job>) {
+        list.sort_by_key(|job| job.release_date);
+    }
+}
+
+impl fmt::Display for Job {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "Job {}:", self.code)?;
+        writeln!(f, "    releaseDate: {}", self.release_date)?;
+        writeln!(f, "    processingTime: {}", self.processing_time)?;
+        writeln!(f, "    dueDate: {}", self.due_date)?;
+        writeln!(f, "    size: {}", self.size)?;
+
+        Ok(())
     }
 }
