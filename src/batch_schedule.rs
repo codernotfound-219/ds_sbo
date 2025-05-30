@@ -1,12 +1,12 @@
 use crate::batch::Batch;
 
-pub struct Order {
+pub struct BatchSchedule {
     pub batches: Vec<Batch>,
 }
 
-impl Order {
+impl BatchSchedule {
     pub fn new() -> Self {
-        Order {
+        BatchSchedule {
             batches: Vec::new(),
         }
     }

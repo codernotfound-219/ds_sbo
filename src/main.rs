@@ -1,6 +1,6 @@
 use ds_sbo_rust::batch::Batch;
 use ds_sbo_rust::job::Job;
-use ds_sbo_rust::order::Order;
+use ds_sbo_rust::batch_schedule::BatchSchedule;
 
 fn main() {
     let job1 = Job::new(1, 1, 29, 9, 9);
@@ -14,7 +14,7 @@ fn main() {
     let job9 = Job::new(9, 18, 28, 8, 6);
     let job10 = Job::new(10, 6, 38, 4, 7);
 
-    let mut order = Order::new();
+    let mut order = BatchSchedule::new();
 
     order.add_batch(Batch::new(1, vec![job5, job6]));
     order.add_batch(Batch::new(2, vec![job7]));

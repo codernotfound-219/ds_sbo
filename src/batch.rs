@@ -29,6 +29,7 @@ impl Batch {
         //
         // let completion_time = release_date + processing_time;
 
+        //NOTE: the fold() does the job of O(3n) in O(n)
         let (release_date, processing_time, size) =
             jobs.iter()
                 .fold((0, 0, 0), |(max_rel, max_pro, total_size), job| {
