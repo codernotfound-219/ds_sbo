@@ -1,2 +1,2 @@
-pub mod structures;
-pub mod solver;
+pub mod core;
+pub mod algorithm;

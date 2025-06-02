@@ -1,4 +1,4 @@
-use ds_sbo_rust::structures::{Batch, BatchSchedule, Job};
+use ds_sbo_rust::core::Job;
 
 fn main() {
     let job1 = Job::new(1, 1, 29, 9, 9);
@@ -12,7 +12,7 @@ fn main() {
     let job9 = Job::new(9, 18, 28, 8, 6);
     let job10 = Job::new(10, 6, 38, 4, 7);
 
-    let mut list = vec![job1, job2, job3, job4, job5, job6, job7, job8, job9, job10];
+    let list = vec![job1, job2, job3, job4, job5, job6, job7, job8, job9, job10];
 
     for job in &list {
         std::println!("{}", job);

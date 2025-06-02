@@ -1,9 +1,9 @@
-use crate::structures::job::Job;
+use crate::core::job::Job;
 use std::fmt;
 
 #[derive(Debug)]
 pub struct Batch {
-    pub jobs: Vec<&Job>,
+    pub jobs: Vec<Job>,
     pub code: u32,
     pub release_date: u32,
     pub processing_time: u32,
@@ -23,22 +23,22 @@ impl Batch {
         }
     }
 
-    pub fn insert_end(&mut self, job: &Job) {
+    pub fn insert_end(&mut self, job: Job) {
         self.jobs.push(job);
         self.update_batch_param();
     }
 
-    pub fn insert_begin(&mut self, job: &Job) {
+    pub fn insert_begin(&mut self, job: Job) {
         self.jobs.insert(0, job);
         self.update_batch_param();
     }
 
-    pub fn insert_at_position(&mut self, index: usize, job: &Job) {
+    pub fn insert_at_position(&mut self, index: usize, job: Job) {
         self.jobs.insert(index, job);
         self.update_batch_param();
     }
 
-    pub fn pop_job(&mut self) -> Option<&Job> {
+    pub fn pop_job(&mut self) -> Option<Job> {
         let out = self.jobs.pop();
         self.update_batch_param();
         out
