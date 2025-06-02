@@ -10,6 +10,14 @@ pub enum Status {
     Fail(u32), // At least one job will be late (value = max lateness)
 }
 
+#[derive(Debug, PartialEq)]
+pub enum Decision {
+    CMPNextBatch,
+    MoveLastJob,
+    CreateNewBatch,
+    InsertAtPosition(usize),
+}
+
 #[derive(Debug)]
 pub struct CMP {
     pub priority: Priority,
