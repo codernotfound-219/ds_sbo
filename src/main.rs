@@ -13,7 +13,6 @@ fn main() {
     let job10 = Job::new(10, 6, 38, 4, 7);
 
     let mut list = vec![job1, job2, job3, job4, job5, job6, job7, job8, job9, job10];
-    Job::sort_release_date(&mut list);
 
     for job in &list {
         std::println!("{}", job);

@@ -3,7 +3,7 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct Batch {
-    pub jobs: Vec<Job>,
+    pub jobs: Vec<&Job>,
     pub code: u32,
     pub release_date: u32,
     pub processing_time: u32,
@@ -12,26 +12,42 @@ pub struct Batch {
 }
 
 impl Batch {
-    pub fn new(code: u32, jobs: Vec<Job>) -> Self {
-        // let size = jobs.iter()
-        //     .map(|job| job.size)
-        //     .sum();
-        //
-        // let release_date = jobs.iter()
-        //     .map(|job| job.release_date)
-        //     .max()
-        //     .unwrap_or(0);
-        //
-        // let processing_time = jobs.iter()
-        //     .map(|job| job.processing_time)
-        //     .max()
-        //     .unwrap_or(0);
-        //
-        // let completion_time = release_date + processing_time;
+    pub fn new(code: u32) -> Self {
+        Batch {
+            jobs: Vec::new(),
+            code,
+            release_date: 0,
+            processing_time: 0,
+            completion_time: 0,
+            size: 0,
+        }
+    }
 
-        //NOTE: the fold() does the job of O(3n) in O(n)
+    pub fn insert_end(&mut self, job: &Job) {
+        self.jobs.push(job);
+        self.update_batch_param();
+    }
+
+    pub fn insert_begin(&mut self, job: &Job) {
+        self.jobs.insert(0, job);
+        self.update_batch_param();
+    }
+
+    pub fn insert_at_position(&mut self, index: usize, job: &Job) {
+        self.jobs.insert(index, job);
+        self.update_batch_param();
+    }
+
+    pub fn pop_job(&mut self) -> Option<&Job> {
+        let out = self.jobs.pop();
+        self.update_batch_param();
+        out
+    }
+
+    fn update_batch_param(&mut self) {
         let (release_date, processing_time, size) =
-            jobs.iter()
+            self.jobs
+                .iter()
                 .fold((0, 0, 0), |(max_rel, max_pro, total_size), job| {
                     (
                         max_rel.max(job.release_date),
@@ -40,30 +56,9 @@ impl Batch {
                     )
                 });
 
-        Batch {
-            jobs,
-            code,
-            release_date,
-            processing_time,
-            completion_time: release_date + processing_time,
-            size,
-        }
-    }
-
-    pub fn insert_end(&mut self, job: Job) {
-        self.jobs.push(job);
-    }
-
-    pub fn insert_begin(&mut self, job: Job) {
-        self.jobs.insert(0, job);
-    }
-
-    pub fn insert_at_position(&mut self, index: usize, job: Job) {
-        self.jobs.insert(index, job);
-    }
-
-    pub fn pop_job(&mut self) -> Option<Job> {
-        self.jobs.pop()
+        self.release_date = release_date;
+        self.processing_time = processing_time;
+        self.size = size;
     }
 }
 
@@ -73,7 +68,9 @@ impl fmt::Display for Batch {
 
         write!(f, "    jobs: ")?;
         for (i, job) in self.jobs.iter().enumerate() {
-            if i > 0 { write!(f, ", ")?; }
+            if i > 0 {
+                write!(f, ", ")?;
+            }
             write!(f, "{}", job.code)?;
         }
 

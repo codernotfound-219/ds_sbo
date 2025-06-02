@@ -1,4 +1,5 @@
 use std::fmt;
+use std::cmp::Reverse;
 
 #[derive(Debug)]
 pub struct Job {
@@ -20,8 +21,8 @@ impl Job {
         }
     }
 
-    pub fn sort_release_date(list: &mut Vec<Job>) {
-        list.sort_by_key(|job| job.release_date);
+    pub fn sort_release_date(list: &mut Vec<&Job>) {
+        list.sort_by_key(|job| Reverse(job.release_date));
     }
 }
 

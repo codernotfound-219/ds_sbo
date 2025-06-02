@@ -15,6 +15,10 @@ impl BatchSchedule {
         &self.batches
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.batches.is_empty()
+    }
+
     pub fn insert_begin(&mut self, batch: Batch) {
         self.batches.insert(0, batch);
         self.update_parameters(0);
