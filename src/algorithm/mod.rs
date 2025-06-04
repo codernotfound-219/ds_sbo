@@ -3,7 +3,6 @@ pub mod solve;
 pub mod utils;
 
 // re-export
-pub use handlers::Decision;
 pub use handlers::Priority;
 pub use handlers::Status;
 pub use handlers::CMP;

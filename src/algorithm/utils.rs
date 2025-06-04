@@ -1,12 +1,15 @@
-use crate::core::{Job, Batch}; 
-use crate::algorithm::{CMP, Priority, Status};
+use crate::algorithm::{Priority, Status, CMP};
+use crate::core::{Batch, Job};
 
 pub fn size_check(size: u32, batch: &Batch, job: &Job) -> bool {
     batch.size + job.size <= size
 }
 
-pub fn comparison(head: &Job, current: &Job) -> CMP {
-    let batch_release = head.release_date.max(current.release_date);
+pub fn comparison(head: &Job, current: &Job, prev_completion: u32) -> CMP {
+    let batch_release = head
+        .release_date
+        .max(current.release_date)
+        .max(prev_completion);
     let batch_processing = head.processing_time.max(current.processing_time);
     let batch_completion = batch_release + batch_processing;
 

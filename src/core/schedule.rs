@@ -1,5 +1,6 @@
 use crate::core::batch::Batch;
 
+#[derive(Debug)]
 pub struct BatchSchedule {
     pub batches: Vec<Batch>,
 }
@@ -45,6 +46,7 @@ impl BatchSchedule {
         for batch in &mut self.batches[index..] {
             batch.release_date = batch.release_date.max(prev_completion);
             batch.completion_time = batch.release_date + batch.processing_time;
+
             prev_completion = batch.completion_time;
         }
     }

@@ -1,25 +1,31 @@
 use crate::core::job::Job;
+use crate::core::DecisionLog;
 use std::fmt;
+use std::u32::MAX;
 
 #[derive(Debug)]
 pub struct Batch {
     pub jobs: Vec<Job>,
-    pub code: u32,
+    pub code: usize,
     pub release_date: u32,
     pub processing_time: u32,
     pub completion_time: u32,
+    pub min_due_time: u32,
     pub size: u32,
+    pub log: Option<DecisionLog>,
 }
 
 impl Batch {
-    pub fn new(code: u32) -> Self {
+    pub fn new(code: usize) -> Self {
         Batch {
             jobs: Vec::new(),
             code,
             release_date: 0,
             processing_time: 0,
             completion_time: 0,
+            min_due_time: MAX,
             size: 0,
+            log: None,
         }
     }
 
@@ -45,19 +51,25 @@ impl Batch {
     }
 
     fn update_batch_param(&mut self) {
-        let (release_date, processing_time, size) =
+        let (release_date, processing_time, min_due_time, size) =
             self.jobs
                 .iter()
-                .fold((0, 0, 0), |(max_rel, max_pro, total_size), job| {
+                .fold((self.jobs[0].release_date,
+                       self.jobs[0].processing_time, 
+                       self.jobs[0].due_date,
+                       self.jobs[0].size), |(max_rel, max_pro, min_due, total_size), job| {
                     (
                         max_rel.max(job.release_date),
                         max_pro.max(job.processing_time),
+                        min_due.min(job.due_date),
                         total_size + job.size,
                     )
                 });
 
         self.release_date = release_date;
         self.processing_time = processing_time;
+        self.min_due_time = min_due_time;
+        self.completion_time = self.release_date + self.processing_time;
         self.size = size;
     }
 }
