@@ -53,7 +53,7 @@ pub fn make_decision(schedule: &mut BatchSchedule, cur: &Job) -> (Decision, Opti
                     continue;
                 },
                 (Priority::Head, Status::Fail(lateness_at_position)) => {
-                    let mut lateness_creation_before = head.due_date - (batch.completion_time + cur.processing_time);
+                    let mut lateness_creation_before = head.due_date - (batch.release_date + cur.processing_time + batch.processing_time);
                     let mut lateness_creation_after = cur.due_date - (batch.completion_time + cur.processing_time);
                     lateness_creation_before = lateness_creation_before.min(get_lateness(batch_index, schedule, cur));
                     lateness_creation_after = lateness_creation_after.min(get_lateness(batch_index+1, schedule, cur));
@@ -72,7 +72,7 @@ pub fn make_decision(schedule: &mut BatchSchedule, cur: &Job) -> (Decision, Opti
                     return (*decision, None);
                 },
                 (Priority::Current, Status::Fail(lateness_at_position)) => {
-                    let mut lateness_creation_before = cur.due_date - (batch.release_date + cur.processing_time);
+                    let mut lateness_creation_before = head.due_date - (batch.release_date + cur.processing_time + batch.processing_time);
                     let mut lateness_creation_after = cur.due_date - (batch.completion_time + cur.processing_time);
                     lateness_creation_before = lateness_creation_before.min(get_lateness(batch_index, schedule, cur));
                     lateness_creation_after = lateness_creation_after.min(get_lateness(batch_index+1, schedule, cur));
