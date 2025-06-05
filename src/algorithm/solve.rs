@@ -31,6 +31,8 @@ pub fn solve(list: &mut Vec<Job>) -> (BatchSchedule, u32) {
 
 pub fn make_decision(schedule: &mut BatchSchedule, cur: &Job) -> (Decision, Option<Vec<Job>>) {
     for (batch_index, batch) in schedule.batches.iter_mut().enumerate() {
+        if (batch.completion_time <= cur.release_date) { continue; }
+
         for (job_index, head) in batch.jobs.iter().enumerate() {
             let result = comparison(&head, &cur, batch.completion_time);
 
