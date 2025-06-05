@@ -1,3 +1,5 @@
+use std::u32::MAX;
+
 use crate::core::{Batch, BatchSchedule, Decision, Job};
 use super::{comparison, size_check, Priority, Status};
 
@@ -22,79 +24,158 @@ pub fn solve(list: &mut Vec<Job>) -> (BatchSchedule, u32) {
 }
 
 // NOTE: This function makes a decision:
-//  1. CompareNextBatch
-//  2. CreateBatchAfter
-//  3. CreateBatchBefore
-//  4. InsertAtPosition
+//  1. CreateBatchAfter
+//  2. CreateBatchBefore
+//  3. InsertAtPosition
 // by comparing the current job from the sorted list, with the given batch.
 
-pub fn make_decision(batch: &mut Batch, cur: &Job) -> (Decision, Option<Vec<Job>>) {
-    for (index, head) in batch.jobs.iter().enumerate() {
-        let result = comparison(&head, &cur, batch.completion_time);
+pub fn make_decision(schedule: &mut BatchSchedule, cur: &Job) -> (Decision, Option<Vec<Job>>) {
+    for (batch_index, batch) in schedule.batches.iter_mut().enumerate() {
+        for (job_index, head) in batch.jobs.iter().enumerate() {
+            let result = comparison(&head, &cur, batch.completion_time);
 
-        match (result.priority, result.status) {
-            (Priority::Current, Status::Pass) => {
-                if size_check(20, batch, &cur) {
-                    return (Decision::InsertAtPosition(index), None);
-                } else {
-                    let mut pop_jobs = Vec::new();
-
-                    while batch.size > 20 {
-                        if let Some(job) = batch.pop_job() {
-                            pop_jobs.push(job);
-                        }
+            match (result.priority, result.status) {
+                (Priority::Current, Status::Pass) => {
+                    if size_check(20, &batch, cur) {
+                        return (Decision::InsertAtPosition(batch_index, job_index), None);
+                    } else {
+                        // TODO:
+                        // 1. check if removing last job frees up space
+                        // 2. see if last job can be placed in the next batch
+                        let pop_job = batch.pop_job().unwrap();
+                },
+                (Priority::Head, Status::Pass) => {
+                    if job_index+1 == batch.jobs.len() {
+                        break;
                     }
+                    continue;
+                },
+                (Priority::Head, Status::Fail(lateness_at_position)) => {
+                    let mut lateness_creation_before = head.due_date - (batch.completion_time + cur.processing_time);
+                    let mut lateness_creation_after = cur.due_date - (batch.completion_time + cur.processing_time);
+                    lateness_creation_before = lateness_creation_before.min(get_lateness(batch_index, schedule, cur));
+                    lateness_creation_after = lateness_creation_after.min(get_lateness(batch_index+1, schedule, cur));
 
-                    return (Decision::InsertAtPosition(index), Some(pop_jobs));
-                }
-            }, 
-            (Priority::Head, Status::Pass) => {
-                continue;
-            },
-            (Priority::Head, Status::Fail(lateness_at_position))=> {
-                // NOTE: compare next_batch, if next_batch is null, create_new_batch
+                    let options = [
+                        (lateness_at_position, Decision::InsertAtPosition(batch_index, job_index+1)),
+                        (lateness_creation_before, Decision::CreateBatchBefore),
+                        (lateness_creation_after, Decision::CreateBatchAfter),
+                    ];
 
-                let lateness_creation_before = head.due_date - (batch.completion_time + cur.processing_time);
-                let lateness_creation_after = cur.due_date - (batch.completion_time + cur.processing_time);
+                    let (_, decision) = options
+                        .iter()
+                        .min_by_key(|&(lateness, _)| lateness)
+                        .expect("At least one options is to be present");
 
-                let options = [
-                    (lateness_at_position, Decision::InsertAtPosition(index+1)),
-                    (lateness_creation_before, Decision::CreateBatchBefore),
-                    (lateness_creation_after, Decision::CreateBatchAfter),
-                ];
+                    return (*decision, None);
+                },
+                (Priority::Current, Status::Fail(lateness_at_position)) => {
+                    let mut lateness_creation_before = cur.due_date - (batch.release_date + cur.processing_time);
+                    let mut lateness_creation_after = cur.due_date - (batch.completion_time + cur.processing_time);
+                    lateness_creation_before = lateness_creation_before.min(get_lateness(batch_index, schedule, cur));
+                    lateness_creation_after = lateness_creation_after.min(get_lateness(batch_index+1, schedule, cur));
 
-                let (_, decision) = options
-                    .iter()
-                    .min_by_key(|&(lateness, _)| lateness)
-                    .expect("At least one options is to be present");
+                    let options = [
+                        (lateness_at_position, Decision::InsertAtPosition(batch_index, job_index)),
+                        (lateness_creation_before, Decision::CreateBatchBefore),
+                        (lateness_creation_after, Decision::CreateBatchAfter),
+                    ];
 
-                return (decision.clone(), None);
-            },
-            (Priority::Current, Status::Fail(lateness_at_position))=> {
-                //NOTE: check creation before, insert at position, creation after
-                // choose: the choice with minimum lateness.
+                    let (_, decision) = options
+                        .iter()
+                        .min_by_key(|&(lateness, _)| lateness)
+                        .expect("At least one options is to be present");
 
-                let lateness_creation_before = cur.due_date - (batch.release_date + cur.processing_time);
-                let lateness_creation_after = cur.due_date - (batch.completion_time + cur.processing_time);
-
-                let options = [
-                    (lateness_at_position, Decision::InsertAtPosition(index)),
-                    (lateness_creation_after, Decision::CreateBatchAfter),
-                    (lateness_creation_before, Decision::CreateBatchBefore),
-                ];
-                
-                let (_, decision) = options
-                    .iter()
-                    .min_by_key(|&(lateness, _)| lateness)
-                    .expect("At least one option to be present");
-
-                return (decision.clone(), None);
-            },
+                    return (*decision, None);
+                },
+            }
         }
     }
 
-    (Decision::CMPNextBatch, None)
+
+    (Decision::CreateBatchBefore, None) // BUG: remove this
 }
+
+fn get_lateness(batch_index: usize, schedule: &BatchSchedule, job: &Job) -> u32 {
+    schedule.batches
+    .get(batch_index..)
+    .and_then(|batches| {
+        batches.iter()
+            .map(|batch| {
+                batch.min_due_time - (batch.completion_time + job.processing_time)  
+            })
+            .min()
+        })
+        .unwrap()
+}
+
+// pub fn make_decision(batch: &mut Batch, cur: &Job) -> (Decision, Option<Vec<Job>>) {
+//     for (index, head) in batch.jobs.iter().enumerate() {
+//         let result = comparison(&head, &cur, batch.completion_time);
+
+//         match (result.priority, result.status) {
+//             (Priority::Current, Status::Pass) => {
+//                 if size_check(20, batch, &cur) {
+//                     return (Decision::InsertAtPosition(index), None);
+//                 } else {
+//                     let mut pop_jobs = Vec::new();
+
+//                     while batch.size > 20 {
+//                         if let Some(job) = batch.pop_job() {
+//                             pop_jobs.push(job);
+//                         }
+//                     }
+
+//                     return (Decision::InsertAtPosition(index), Some(pop_jobs));
+//                 }
+//             }, 
+//             (Priority::Head, Status::Pass) => {
+//                 continue;
+//             },
+//             (Priority::Head, Status::Fail(lateness_at_position))=> {
+//                 // NOTE: compare next_batch, if next_batch is null, create_new_batch
+
+//                 let lateness_creation_before = head.due_date - (batch.completion_time + cur.processing_time);
+//                 let lateness_creation_after = cur.due_date - (batch.completion_time + cur.processing_time);
+
+//                 let options = [
+//                     (lateness_at_position, Decision::InsertAtPosition(index+1)),
+//                     (lateness_creation_before, Decision::CreateBatchBefore),
+//                     (lateness_creation_after, Decision::CreateBatchAfter),
+//                 ];
+
+//                 let (_, decision) = options
+//                     .iter()
+//                     .min_by_key(|&(lateness, _)| lateness)
+//                     .expect("At least one options is to be present");
+
+//                 return (decision.clone(), None);
+//             },
+//             (Priority::Current, Status::Fail(lateness_at_position))=> {
+//                 //NOTE: check creation before, insert at position, creation after
+//                 // choose: the choice with minimum lateness.
+
+//                 let lateness_creation_before = cur.due_date - (batch.release_date + cur.processing_time);
+//                 let lateness_creation_after = cur.due_date - (batch.completion_time + cur.processing_time);
+
+//                 let options = [
+//                     (lateness_at_position, Decision::InsertAtPosition(index)),
+//                     (lateness_creation_after, Decision::CreateBatchAfter),
+//                     (lateness_creation_before, Decision::CreateBatchBefore),
+//                 ];
+                
+//                 let (_, decision) = options
+//                     .iter()
+//                     .min_by_key(|&(lateness, _)| lateness)
+//                     .expect("At least one option to be present");
+
+//                 return (decision.clone(), None);
+//             },
+//         }
+//     }
+
+//     (Decision::CMPNextBatch, None)
+// }
 
 // pub fn execute(schedule: &mut BatchSchedule, job: Job) {
 //     let batch_len = schedule.batches.len();

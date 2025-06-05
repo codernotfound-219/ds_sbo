@@ -51,20 +51,22 @@ impl Batch {
     }
 
     fn update_batch_param(&mut self) {
-        let (release_date, processing_time, min_due_time, size) =
-            self.jobs
-                .iter()
-                .fold((self.jobs[0].release_date,
-                       self.jobs[0].processing_time, 
-                       self.jobs[0].due_date,
-                       self.jobs[0].size), |(max_rel, max_pro, min_due, total_size), job| {
-                    (
-                        max_rel.max(job.release_date),
-                        max_pro.max(job.processing_time),
-                        min_due.min(job.due_date),
-                        total_size + job.size,
-                    )
-                });
+        let (release_date, processing_time, min_due_time, size) = self.jobs.iter().fold(
+            (
+                self.jobs[0].release_date,
+                self.jobs[0].processing_time,
+                self.jobs[0].due_date,
+                self.jobs[0].size,
+            ),
+            |(max_rel, max_pro, min_due, total_size), job| {
+                (
+                    max_rel.max(job.release_date),
+                    max_pro.max(job.processing_time),
+                    min_due.min(job.due_date),
+                    total_size + job.size,
+                )
+            },
+        );
 
         self.release_date = release_date;
         self.processing_time = processing_time;
