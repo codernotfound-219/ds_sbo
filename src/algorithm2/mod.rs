@@ -8,3 +8,4 @@ pub use structures::EndDecision;
 pub use helper::locate_eligible_batch;
 pub use helper::make_end_decision;
 pub use helper::find_cost_creating_before;
+pub use helper::find_cost_inserting_in_batch;

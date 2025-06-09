@@ -3,7 +3,7 @@ use crate::core::DecisionLog;
 use std::fmt;
 use std::u32::MAX;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Batch {
     pub jobs: Vec<Job>,
     pub code: usize,

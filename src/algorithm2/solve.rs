@@ -1,5 +1,5 @@
 use crate::core::{Job, Batch, BatchSchedule};
-use super::helper::{locate_eligible_batch, find_cost_creating_before, make_end_decision};
+use super::helper::{find_cost_creating_before, locate_eligible_batch, make_end_decision, size_check};
 use super::structures::{Decision, EndDecision};
 
 pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
