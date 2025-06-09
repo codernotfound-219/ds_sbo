@@ -126,26 +126,13 @@ pub fn find_cost_inserting_in_batch(
         schedule.batches[batch_index-1].completion_time
     };
 
-    let cost_of_current_batch = compute_batch_cost(&new_jobs, &cur_job, completion_time);
+    let (cost_of_current_batch, current_batch_completion) = compute_batch_cost_and_completion(&new_jobs, &cur_job, completion_time);
     let updated_current_cost = current_cost.min(cost_of_current_batch);
 
     // Base case: if there are no more batches, create a new batch for the popped job
     if batch_index + 1 >= schedule.batches.len() {
-        let (max_release, max_processing, min_due) =
-            new_jobs
-                .iter()
-                .fold((0, 0, u32::MAX), |(mut rel, mut proc, mut due), job| {
-                    rel = rel.max(job.release_date);
-                    proc = proc.max(job.processing_time);
-                    due = due.min(job.due_date);
-                    (rel, proc, due)
-                });
-
-        let completion = max_release + max_processing;
-
-        let cost_of_current_batch = min_due as i32 - completion as i32;
         let cost_of_new_batch =
-            last_job.due_date as i32 - (completion as i32 + last_job.processing_time as i32);
+            last_job.due_date as i32 - (current_batch_completion as i32 + last_job.processing_time as i32);
 
         return updated_current_cost
             .min(cost_of_current_batch)
@@ -184,7 +171,7 @@ fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job
     return cost_inserting.min(min_cost);
 }
 
-fn compute_batch_cost(batch_list: &[Job], cur_job: &Job, release_date: u32) -> i32 {
+fn compute_batch_cost_and_completion(batch_list: &[Job], cur_job: &Job, release_date: u32) -> (i32, u32) {
     let mut max_release = cur_job.release_date.max(release_date);
     let mut max_processing = cur_job.processing_time;
     let mut min_due = cur_job.due_date;
@@ -200,5 +187,7 @@ fn compute_batch_cost(batch_list: &[Job], cur_job: &Job, release_date: u32) -> i
             min_due = job.due_date;
         }
     }
-    min_due as i32 - (max_release as i32 + max_processing as i32)
+
+    let completion = max_release + max_processing;
+    ((min_due as i32 - completion as i32), completion)
 }
