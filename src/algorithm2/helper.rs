@@ -71,26 +71,19 @@ pub fn make_end_decision(schedule: &BatchSchedule, job: &Job) -> EndDecision {
 pub fn find_cost_creating_before(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
     let batch = &schedule.batches[batch_index];
     let release_date = batch.release_date.max(job.release_date);
-    let cost_creating_before =
-        job.due_date as i32 - (release_date as i32 + job.processing_time as i32);
+    let mut completion = release_date + job.processing_time;
+    let cost_creating_before = job.due_date as i32 - completion as i32;
 
-    let num = batch.release_date as i32 - job.release_date as i32;
-    let to_add = if num < 0 {
-        job.processing_time + (-num) as u32
-    } else {
-        job.processing_time
-    };
+    let mut min_cost = i32::MAX;
 
-    let min_cost = schedule
-        .batches
-        .iter()
-        .enumerate()
-        .skip(batch_index)
-        .map(|(_, batch)| {
-            batch.min_due_time as i32 - (batch.completion_time as i32 + to_add as i32)
-        })
-        .min()
-        .unwrap_or(i32::MAX);
+    for index in batch_index .. schedule.batches.len() {
+        let batch = &schedule.batches[index];
+        let release_date = completion.max(batch.release_date);
+        completion = release_date + batch.processing_time;
+
+        let cost = batch.min_due_time as i32 - completion as i32;
+        min_cost = min_cost.min(cost);
+    }
 
     min_cost.min(cost_creating_before)
 }
@@ -146,27 +139,26 @@ pub fn find_cost_inserting_in_batch(
 fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
     let batch = &schedule.batches[batch_index];
 
-    let due_date = batch.min_due_time.min(job.due_date);
-    let release = batch.release_date.max(job.release_date);
-    let processing = batch.processing_time.max(job.processing_time);
-    let cost_inserting = due_date as i32 - (release as i32 + processing as i32);
+    let due_date = batch.min_due_time.min(job.due_date); // 19
+    let release = batch.release_date.max(job.release_date); // 9
+    let processing = batch.processing_time.max(job.processing_time); // 1
+    let mut completion = release + processing; // 10
+    let cost_inserting = due_date as i32 - completion as i32; // 19 - 10 = 9
 
     if batch_index + 1 == schedule.batches.len() {
         return cost_inserting;
     }
 
-    let to_add = (release + processing) - batch.completion_time;
+    let mut min_cost = i32::MAX;
 
-    let min_cost = schedule
-        .batches
-        .iter()
-        .enumerate()
-        .skip(batch_index + 1)
-        .map(|(_, batch)| {
-            batch.min_due_time as i32 - (batch.completion_time as i32 + to_add as i32)
-        })
-        .min()
-        .unwrap_or(i32::MAX);
+    for index in batch_index+1 .. schedule.batches.len() {
+        let batch = &schedule.batches[index];
+        let release_date = completion.max(batch.release_date);
+        completion = release_date + batch.processing_time;
+
+        let cost = batch.min_due_time as i32 - completion as i32;
+        min_cost = min_cost.min(cost);
+    }
 
     return cost_inserting.min(min_cost);
 }
