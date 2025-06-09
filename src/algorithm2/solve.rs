@@ -1,5 +1,7 @@
+use std::i32;
+
 use crate::core::{Job, Batch, BatchSchedule};
-use super::helper::{locate_eligible_batch, should_create_or_insert_last, size_check};
+use super::helper::{locate_eligible_batch, make_end_decision};
 use super::structures::{Decision, EndDecision};
 
 pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
@@ -15,9 +17,9 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, current.due_date) {
             // TODO: compare 3 testcases
-            // let result = comparison(schedule, batch_index, current);
+            let result = make_decision(&schedule, batch_index, &current);
         } else {
-            let result = should_create_or_insert_last(&schedule, &current);
+            let result = make_end_decision(&schedule, &current);
 
             match result {
                 EndDecision::CreateAfter(_) => {create_end(&mut schedule, current);},
@@ -27,6 +29,33 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     }
 
     schedule
+}
+
+pub fn make_decision(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> Decision {
+    let cost_creating_before = find_cost_creating_before(&schedule, batch_index, &job);
+}
+
+pub fn find_cost_creating_before(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
+    let batch = &schedule.batches[batch_index];
+    let release_date = batch.release_date.max(job.release_date);
+    let cost_creating_before = job.due_date as i32 - (release_date as i32 + job.processing_time as i32);
+
+    let num = batch.release_date as i32 - job.release_date as i32;
+    let to_add = if num < 0 {
+        job.processing_time + (-num) as u32
+    } else {
+        job.processing_time
+    };
+
+
+    let min_cost = schedule.batches.iter()
+        .enumerate()
+        .skip(batch_index)
+        .map(|(_, batch)| batch.min_due_time as i32 - (batch.completion_time as i32 + to_add as i32))
+        .min()
+        .unwrap_or(i32::MAX);
+
+    min_cost.min(cost_creating_before)
 }
 
 pub fn create_end(schedule: &mut BatchSchedule, job: Job) {
