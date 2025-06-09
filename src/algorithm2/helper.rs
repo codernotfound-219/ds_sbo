@@ -1,4 +1,7 @@
-pub fn should_create_or_insert_last(schedule: &BatchSchedule, job: &Job) -> EndDecision {
+use crate::core::{Batch, BatchSchedule, Job};
+use super::{Decision, EndDecision};
+
+pub fn make_end_decision(schedule: &BatchSchedule, job: &Job) -> EndDecision {
     let last_batch = &schedule.batches[schedule.batches.len()-1];
     let cost_of_creating_after = job.due_date as i32 - (last_batch.completion_time as i32 + job.processing_time as i32);
 
@@ -38,4 +41,27 @@ pub fn locate_eligible_batch(schedule: &BatchSchedule, due: u32) -> Option<usize
 
 pub fn size_check(size: u32, batch: &Batch, job: &Job) -> bool {
     batch.size + job.size <= size
+}
+
+pub fn find_cost_creating_before(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
+    let batch = &schedule.batches[batch_index];
+    let release_date = batch.release_date.max(job.release_date);
+    let cost_creating_before = job.due_date as i32 - (release_date as i32 + job.processing_time as i32);
+
+    let num = batch.release_date as i32 - job.release_date as i32;
+    let to_add = if num < 0 {
+        job.processing_time + (-num) as u32
+    } else {
+        job.processing_time
+    };
+
+
+    let min_cost = schedule.batches.iter()
+        .enumerate()
+        .skip(batch_index)
+        .map(|(_, batch)| batch.min_due_time as i32 - (batch.completion_time as i32 + to_add as i32))
+        .min()
+        .unwrap_or(i32::MAX);
+
+    min_cost.min(cost_creating_before)
 }
