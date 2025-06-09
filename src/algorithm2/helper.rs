@@ -105,9 +105,9 @@ pub fn find_cost_inserting_in_batch(
 
     if size_check(20, batch, cur_job) {
         return current_cost.min(find_cost_inserting_size_ok(
-            &schedule,
+            schedule,
             batch_index,
-            &cur_job,
+            cur_job,
         ));
     }
 
@@ -136,7 +136,7 @@ pub fn find_cost_inserting_in_batch(
     find_cost_inserting_in_batch(schedule, batch_index + 1, &last_job, updated_current_cost)
 }
 
-fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
+pub fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
     let batch = &schedule.batches[batch_index];
 
     let due_date = batch.min_due_time.min(job.due_date); // 19
@@ -160,7 +160,7 @@ fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job
         min_cost = min_cost.min(cost);
     }
 
-    return cost_inserting.min(min_cost);
+    cost_inserting.min(min_cost)
 }
 
 fn compute_batch_cost_and_completion(batch_list: &[Job], cur_job: &Job, release_date: u32) -> (i32, u32) {

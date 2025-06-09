@@ -1,8 +1,6 @@
 #[cfg(test)]
 mod test {
-    use std::i32;
-
-    use ds_sbo_rust::core::{Batch, Job, BatchSchedule};
+    use ds_sbo_rust::core::{Batch, BatchSchedule};
     use ds_sbo_rust::algorithm2::{locate_eligible_batch, find_cost_inserting_in_batch};
     use ds_sbo_rust::resources::problem2::*;
 
@@ -126,8 +124,6 @@ mod test {
         schedule.insert_begin(batch3);
         schedule.insert_begin(batch2);
         schedule.insert_begin(batch1);
-
-        panic!("{:#?}", schedule);
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, tester.due_date) {
             let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX);
