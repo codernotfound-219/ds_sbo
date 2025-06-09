@@ -1,5 +1,3 @@
-use std::u32;
-
 use super::EndDecision;
 use crate::core::{Batch, BatchSchedule, Job};
 
@@ -95,6 +93,14 @@ pub fn size_check(capacity: u32, batch: &Batch, job: &Job) -> bool {
     batch.size + job.size <= capacity
 }
 
+// NOTE:
+// This function calculates the cost of inserting at position:
+// if size_check is ok:
+//      -> iterates through batches, returns min_cost
+// else:
+//      -> recursively pops and moves jobs and keeps track of min_cost
+//      -> returns the min_cost
+
 pub fn find_cost_inserting_in_batch(
     schedule: &BatchSchedule,
     batch_index: usize,
@@ -119,7 +125,7 @@ pub fn find_cost_inserting_in_batch(
         schedule.batches[batch_index-1].completion_time
     };
 
-    let (cost_of_current_batch, current_batch_completion) = compute_batch_cost_and_completion(&new_jobs, &cur_job, completion_time);
+    let (cost_of_current_batch, current_batch_completion) = compute_batch_cost_and_completion(&new_jobs, cur_job, completion_time);
     let updated_current_cost = current_cost.min(cost_of_current_batch);
 
     // Base case: if there are no more batches, create a new batch for the popped job
@@ -136,7 +142,7 @@ pub fn find_cost_inserting_in_batch(
     find_cost_inserting_in_batch(schedule, batch_index + 1, &last_job, updated_current_cost)
 }
 
-pub fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
+fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
     let batch = &schedule.batches[batch_index];
 
     let due_date = batch.min_due_time.min(job.due_date); // 19
