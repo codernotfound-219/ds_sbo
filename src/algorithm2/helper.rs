@@ -120,8 +120,13 @@ pub fn find_cost_inserting_in_batch(
 
     let mut new_jobs = batch.jobs.clone();
     let last_job = new_jobs.pop().expect("No job to move");
+    let completion_time = if batch_index == 0 {
+        0
+    } else {
+        schedule.batches[batch_index-1].completion_time
+    };
 
-    let cost_of_current_batch = compute_batch_cost(&new_jobs, &cur_job);
+    let cost_of_current_batch = compute_batch_cost(&new_jobs, &cur_job, completion_time);
     let updated_current_cost = current_cost.min(cost_of_current_batch);
 
     // Base case: if there are no more batches, create a new batch for the popped job
@@ -179,8 +184,8 @@ fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job
     return cost_inserting.min(min_cost);
 }
 
-fn compute_batch_cost(batch_list: &[Job], cur_job: &Job) -> i32 {
-    let mut max_release = cur_job.release_date;
+fn compute_batch_cost(batch_list: &[Job], cur_job: &Job, release_date: u32) -> i32 {
+    let mut max_release = cur_job.release_date.max(release_date);
     let mut max_processing = cur_job.processing_time;
     let mut min_due = cur_job.due_date;
 
