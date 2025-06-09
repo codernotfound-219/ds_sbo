@@ -1,7 +1,5 @@
-use std::i32;
-
 use crate::core::{Job, Batch, BatchSchedule};
-use super::helper::{locate_eligible_batch, make_end_decision};
+use super::helper::{locate_eligible_batch, find_cost_creating_before, make_end_decision};
 use super::structures::{Decision, EndDecision};
 
 pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
@@ -17,7 +15,7 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, current.due_date) {
             // TODO: compare 3 testcases
-            let result = make_decision(&schedule, batch_index, &current);
+            // let result = make_decision(&schedule, batch_index, &current);
         } else {
             let result = make_end_decision(&schedule, &current);
 
@@ -31,9 +29,9 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     schedule
 }
 
-pub fn make_decision(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> Decision {
-    let cost_creating_before = find_cost_creating_before(&schedule, batch_index, &job);
-}
+// pub fn make_decision(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> Decision {
+//     let cost_creating_before = find_cost_creating_before(&schedule, batch_index, &job);
+// }
 
 pub fn create_end(schedule: &mut BatchSchedule, job: Job) {
     let batch_code = schedule.batches.len() + 1;
