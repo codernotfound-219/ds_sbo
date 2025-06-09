@@ -1,5 +1,5 @@
 use crate::core::{Batch, BatchSchedule, Job};
-use super::{Decision, EndDecision};
+use super::EndDecision;
 
 pub fn make_end_decision(schedule: &BatchSchedule, job: &Job) -> EndDecision {
     let last_batch = &schedule.batches[schedule.batches.len()-1];

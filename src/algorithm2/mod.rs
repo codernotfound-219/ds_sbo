@@ -6,4 +6,5 @@ pub use solve::solve;
 pub use structures::Decision;
 pub use structures::EndDecision;
 pub use helper::locate_eligible_batch;
-pub use helper::should_create_or_insert_last;
+pub use helper::make_end_decision;
+pub use helper::find_cost_creating_before;

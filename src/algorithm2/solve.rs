@@ -35,29 +35,6 @@ pub fn make_decision(schedule: &BatchSchedule, batch_index: usize, job: &Job) ->
     let cost_creating_before = find_cost_creating_before(&schedule, batch_index, &job);
 }
 
-pub fn find_cost_creating_before(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
-    let batch = &schedule.batches[batch_index];
-    let release_date = batch.release_date.max(job.release_date);
-    let cost_creating_before = job.due_date as i32 - (release_date as i32 + job.processing_time as i32);
-
-    let num = batch.release_date as i32 - job.release_date as i32;
-    let to_add = if num < 0 {
-        job.processing_time + (-num) as u32
-    } else {
-        job.processing_time
-    };
-
-
-    let min_cost = schedule.batches.iter()
-        .enumerate()
-        .skip(batch_index)
-        .map(|(_, batch)| batch.min_due_time as i32 - (batch.completion_time as i32 + to_add as i32))
-        .min()
-        .unwrap_or(i32::MAX);
-
-    min_cost.min(cost_creating_before)
-}
-
 pub fn create_end(schedule: &mut BatchSchedule, job: Job) {
     let batch_code = schedule.batches.len() + 1;
     let mut batch = Batch::new(batch_code);
