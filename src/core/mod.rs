@@ -9,3 +9,4 @@ pub use batch::Batch;
 pub use schedule::BatchSchedule;
 pub use handlers::DecisionLog;
 pub use handlers::Decision;
+pub use handlers::MoveVariant;

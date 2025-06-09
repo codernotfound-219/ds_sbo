@@ -1,3 +1,3 @@
 pub mod core;
-pub mod algorithm;
+pub mod algorithm2;
 pub mod resources;

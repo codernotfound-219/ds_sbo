@@ -7,7 +7,7 @@ pub enum Priority {
 #[derive(Debug, PartialEq)]
 pub enum Status {
     Pass,      // Both jobs can meet their deadlines
-    Fail(u32), // At least one job will be late (value = max lateness)
+    Fail(i32), // At least one job will be late (value = max lateness)
 }
 
 #[derive(Debug)]

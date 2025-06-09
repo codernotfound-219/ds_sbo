@@ -31,19 +31,11 @@ pub fn determine_priority(head_slack: u32, current_slack: u32) -> Priority {
 }
 
 pub fn calculate_status(head_slack: i32, current_slack: i32) -> Status {
-    let head_lateness = if head_slack < 0 {
-        (-head_slack) as u32
-    } else {
-        0
-    };
-    let current_lateness = if current_slack < 0 {
-        (-current_slack) as u32
-    } else {
-        0
-    };
+    let minimum = head_slack.min(current_slack);
 
-    match (head_lateness, current_lateness) {
-        (0, 0) => Status::Pass,
-        (head_late, current_late) => Status::Fail(head_late.max(current_late)),
+    if minimum >= 0 {
+        return Status::Pass;
     }
+
+    Status::Fail(minimum)
 }
