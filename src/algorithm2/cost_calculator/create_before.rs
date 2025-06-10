@@ -23,4 +23,3 @@ pub fn find_cost_creating_before(schedule: &BatchSchedule, batch_index: usize, j
 
     min_cost.min(cost_creating_before)
 }
-

@@ -1,7 +1,9 @@
 #[cfg(test)]
 mod test {
-    use ds_sbo_rust::algorithm2::{locate_eligible_batch, Decision, make_end_decision};
     use ds_sbo_rust::core::{Batch, BatchSchedule};
+    use ds_sbo_rust::algorithm2::locate_eligible_batch;
+    use ds_sbo_rust::algorithm2::cost_calculator::make_end_decision;
+    use ds_sbo_rust::algorithm2::structures::{EndDecision, Decision};
     use ds_sbo_rust::resources::problem2::*;
 
     #[test]
