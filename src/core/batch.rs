@@ -84,7 +84,7 @@ impl fmt::Display for Batch {
             write!(f, "{}", job.code)?;
         }
 
-        writeln!(f, "")?;
+        writeln!(f)?;
         writeln!(f, "    releaseDate: {}", self.release_date)?;
         writeln!(f, "    processingTime: {}", self.processing_time)?;
         writeln!(f, "    completionTime: {}", self.completion_time)?;

@@ -1,4 +1,5 @@
 use crate::core::batch::Batch;
+use std::fmt;
 
 #[derive(Debug, PartialEq)]
 pub struct BatchSchedule {
@@ -58,5 +59,24 @@ impl BatchSchedule {
 impl Default for BatchSchedule {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl fmt::Display for BatchSchedule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "BatchSchedule:")?;
+        for batch in &self.batches {
+            writeln!(f, "    Batch_Code: {}", batch.code)?;
+            write!(f, "    Batch_Jobs: ")?;
+            for (i, job) in batch.jobs.iter().enumerate() {
+                if i > 0 { write!(f, ", ")?; }
+                write!(f, "{}", job.code)?;
+            }
+            writeln!(f)?;
+            writeln!(f, "    Batch_release: {}", batch.release_date)?;
+            writeln!(f, "    Batch_completion: {}", batch.completion_time)?;
+            writeln!(f, "    Batch_size: {}", batch.size)?;
+        }
+        Ok(())
     }
 }
