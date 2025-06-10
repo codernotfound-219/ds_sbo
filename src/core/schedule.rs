@@ -75,6 +75,7 @@ impl fmt::Display for BatchSchedule {
             writeln!(f)?;
             writeln!(f, "    Batch_release: {}", batch.release_date)?;
             writeln!(f, "    Batch_completion: {}", batch.completion_time)?;
+            writeln!(f, "    Batch_min_due_date: {}", batch.min_due_time)?;
             writeln!(f, "    Batch_size: {}", batch.size)?;
             writeln!(f)?;
         }
