@@ -2,6 +2,7 @@ pub mod solve;
 pub mod helper;
 pub mod structures;
 pub mod cost_calculator;
+pub mod utils;
 
 pub use solve::solve;
 
