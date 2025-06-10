@@ -29,10 +29,6 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     schedule
 }
 
-// pub fn make_decision(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> Decision {
-//     let cost_creating_before = find_cost_creating_before(&schedule, batch_index, &job);
-// }
-
 pub fn create_end(schedule: &mut BatchSchedule, job: Job) {
     let batch_code = schedule.batches.len() + 1;
     let mut batch = Batch::new(batch_code);

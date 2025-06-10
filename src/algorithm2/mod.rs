@@ -1,6 +1,7 @@
 pub mod solve;
 pub mod helper;
 pub mod structures;
+pub mod cost_calculator;
 
 pub use solve::solve;
 pub use structures::Decision;
