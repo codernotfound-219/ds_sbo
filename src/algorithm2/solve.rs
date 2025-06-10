@@ -1,7 +1,5 @@
 use crate::core::{Job, Batch, BatchSchedule};
-use super::helper::locate_eligible_batch;
-use super::cost_calculator::make_end_decision;
-use super::structures::EndDecision;
+use super::{make_end_decision, locate_eligible_batch, EndDecision};
 
 pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     let mut schedule = BatchSchedule::new();
