@@ -29,6 +29,7 @@ mod test {
         input.insert_begin(batch1);
 
         input.insert_at_position(1, new_batch);
+        println!("{}", input);
 
         assert_eq!(result, input);
     }
