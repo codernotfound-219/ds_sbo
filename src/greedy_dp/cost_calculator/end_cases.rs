@@ -1,6 +1,5 @@
 use crate::core::{BatchSchedule, Job};
-use crate::algorithm2::EndDecision;
-use crate::algorithm2::helper::size_check;
+use crate::greedy_dp::{EndDecision, size_check};
 
 // NOTE:
 // This function handles the case when there are no eligible batches found:

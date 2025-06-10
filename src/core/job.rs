@@ -1,7 +1,7 @@
 use std::fmt;
 use std::cmp::Reverse;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Job {
     pub code: u32,
     pub release_date: u32,

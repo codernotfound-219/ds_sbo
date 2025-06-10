@@ -1,6 +1,6 @@
 use crate::core::batch::Batch;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct BatchSchedule {
     pub batches: Vec<Batch>,
 }
@@ -37,17 +37,20 @@ impl BatchSchedule {
     }
 
     fn update_parameters(&mut self, index: usize) {
-        let mut prev_completion = if index == 0 {
-            0
+        let (mut prev_completion, mut prev_code) = if index == 0 {
+            (0, 0 as usize)
         } else {
-            self.batches[index - 1].completion_time
+            (self.batches[index - 1].completion_time, self.batches[index-1].code as usize)
         };
+
 
         for batch in &mut self.batches[index..] {
             batch.release_date = batch.release_date.max(prev_completion);
             batch.completion_time = batch.release_date + batch.processing_time;
+            batch.code = prev_code + 1;
 
             prev_completion = batch.completion_time;
+            prev_code += 1;
         }
     }
 }

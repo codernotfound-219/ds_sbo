@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use ds_sbo_rust::core::{Batch, BatchSchedule};
-    use ds_sbo_rust::algorithm2::locate_eligible_batch;
+    use ds_sbo_rust::greedy_dp::locate_eligible_batch;
     use ds_sbo_rust::resources::problem2::*;
 
     #[test]

@@ -3,7 +3,7 @@ use crate::core::DecisionLog;
 use std::fmt;
 use std::u32::MAX;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Batch {
     pub jobs: Vec<Job>,
     pub code: usize,
@@ -12,7 +12,6 @@ pub struct Batch {
     pub completion_time: u32,
     pub min_due_time: u32,
     pub size: u32,
-    pub log: Option<DecisionLog>,
 }
 
 impl Batch {
@@ -25,7 +24,6 @@ impl Batch {
             completion_time: 0,
             min_due_time: MAX,
             size: 0,
-            log: None,
         }
     }
 
