@@ -1,9 +1,7 @@
 #[cfg(test)]
 mod test {
     use ds_sbo_rust::core::{Batch, BatchSchedule};
-    use ds_sbo_rust::algorithm2::locate_eligible_batch;
-    use ds_sbo_rust::algorithm2::cost_calculator::make_end_decision;
-    use ds_sbo_rust::algorithm2::structures::{EndDecision, Decision};
+    use ds_sbo_rust::algorithm2::{locate_eligible_batch, make_end_decision, EndDecision};
     use ds_sbo_rust::resources::problem2::*;
 
     #[test]
@@ -42,7 +40,7 @@ mod test {
         assert_eq!(result_index, None);
 
         let decision = make_end_decision(&schedule, &tester);
-        assert_eq!(decision, Decision::CreateAfter(-1));
+        assert_eq!(decision, EndDecision::CreateAfter(-1));
     }
 
     #[test]
@@ -101,6 +99,6 @@ mod test {
         assert_eq!(result_index, None);
 
         let decision = make_end_decision(&schedule, &tester);
-        assert_eq!(decision, Decision::CreateAfter(28));
+        assert_eq!(decision, EndDecision::CreateAfter(28));
     }
 }
