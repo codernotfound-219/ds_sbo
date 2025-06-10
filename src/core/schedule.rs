@@ -70,7 +70,7 @@ impl fmt::Display for BatchSchedule {
             write!(f, "    Batch_Jobs: ")?;
             for (i, job) in batch.jobs.iter().enumerate() {
                 if i > 0 { write!(f, ", ")?; }
-                write!(f, "{}", job.code)?;
+                write!(f, "J{}", job.code)?;
             }
             writeln!(f)?;
             writeln!(f, "    Batch_release: {}", batch.release_date)?;
