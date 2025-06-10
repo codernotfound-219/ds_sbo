@@ -14,13 +14,13 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
         let current = list.pop().expect("ERROR: expected a job in the sorted list");
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, current.due_date) {
-            let result = make_decision(&schedule, batch_index, &current);
-
-            match result {
-                Decision::CreateAfter(_) => {
-                Decision::CreateBefore(_) =>
-                Decision::InsertAtPosition(_) =>
-            }
+            // let result = make_decision(&schedule, batch_index, &current);
+            //
+            // match result {
+            //     Decision::CreateAfter(_) => {
+            //     Decision::CreateBefore(_) =>
+            //     Decision::InsertAtPosition(_) =>
+            // }
         } else {
             let result = make_end_decision(&schedule, &current);
 
@@ -34,12 +34,12 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     schedule
 }
 
-fn create_after(schedule: &mut BatchSchedule, batch_index: usize, job: Job) {
-    let batch = &schedule.batches[batch_index];
-    let mut new_batch = Batch::new(batch.code+1);
-    new_batch.insert_begin(job);
-    schedule.insert_at_position(index, batch);
-}
+// fn create_after(schedule: &mut BatchSchedule, batch_index: usize, job: Job) {
+//     let batch = &schedule.batches[batch_index];
+//     let mut new_batch = Batch::new(batch.code+1);
+//     new_batch.insert_begin(job);
+//     schedule.insert_at_position(index, batch);
+// }
 
 fn create_end(schedule: &mut BatchSchedule, job: Job) {
     let batch_code = schedule.batches.len() + 1;

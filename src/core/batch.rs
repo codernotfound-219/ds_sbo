@@ -1,7 +1,5 @@
 use crate::core::job::Job;
-use crate::core::DecisionLog;
 use std::fmt;
-use std::u32::MAX;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Batch {
@@ -22,7 +20,7 @@ impl Batch {
             release_date: 0,
             processing_time: 0,
             completion_time: 0,
-            min_due_time: MAX,
+            min_due_time: u32::MAX,
             size: 0,
         }
     }
