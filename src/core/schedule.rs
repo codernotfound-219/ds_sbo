@@ -38,9 +38,9 @@ impl BatchSchedule {
 
     fn update_parameters(&mut self, index: usize) {
         let (mut prev_completion, mut prev_code) = if index == 0 {
-            (0, 0 as usize)
+            (0, 0)
         } else {
-            (self.batches[index - 1].completion_time, self.batches[index-1].code as usize)
+            (self.batches[index - 1].completion_time, self.batches[index-1].code)
         };
 
 
@@ -52,5 +52,11 @@ impl BatchSchedule {
             prev_completion = batch.completion_time;
             prev_code += 1;
         }
+    }
+}
+
+impl Default for BatchSchedule {
+    fn default() -> Self {
+        Self::new()
     }
 }
