@@ -34,7 +34,7 @@ pub fn find_cost_inserting_in_batch(
     };
 
     let (cost_of_current_batch, current_batch_completion) = compute_batch_cost_and_completion(&new_jobs, cur_job, completion_time);
-    let updated_current_cost = current_cost.min(cost_of_current_batch);
+    let mut updated_current_cost = current_cost.min(cost_of_current_batch);
 
     // Base case: if there are no more batches, create a new batch for the popped job
     if batch_index + 1 >= schedule.batches.len() {
@@ -45,9 +45,29 @@ pub fn find_cost_inserting_in_batch(
             .min(cost_of_current_batch)
             .min(cost_of_new_batch);
     }
+    let cost_of_moving_last_job_as_new_batch = compute_remaining_batch_cost(schedule, &last_job, batch_index+1, current_batch_completion);
+    updated_current_cost = updated_current_cost.min(cost_of_moving_last_job_as_new_batch);
 
     // Recursive case: try to insert the last_job into the next batch
     find_cost_inserting_in_batch(schedule, batch_index + 1, &last_job, updated_current_cost)
+}
+
+fn compute_remaining_batch_cost(schedule: &BatchSchedule, popped_job: &Job, batch_index: usize, prev_completion: u32) -> i32 {
+    let mut completion = prev_completion.max(popped_job.release_date) + popped_job.processing_time;
+    let cost_of_new_batch = popped_job.due_date as i32- completion as i32;
+
+    let mut min_cost = i32::MAX;
+
+    for index in batch_index .. schedule.batches.len() {
+        let batch = &schedule.batches[index];
+        let release_date = completion.max(batch.release_date);
+        completion = release_date + batch.processing_time;
+
+        let cost = batch.min_due_time as i32 - completion as i32;
+        min_cost = min_cost.min(cost);
+    }
+
+    cost_of_new_batch.min(min_cost)
 }
 
 fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job: &Job) -> i32 {
