@@ -8,16 +8,25 @@ use crate::greedy_dp::size_check;
 // else:
 //      -> recursively pops and moves jobs and keeps track of min_cost
 //      -> returns the min_cost
+//
+
+pub enum InsertAction {
+    InsertInBatch {batch_index: usize, job_code: u32},
+    PopAndCreateNewBatch {batch_index: usize, job_code: u32},
+    PopAndInsertInNextBatch {batch_index: usize, job_code: u32},
+}
 
 pub fn find_cost_inserting_in_batch(
     schedule: &BatchSchedule,
     batch_index: usize,
     cur_job: &Job,
     current_cost: i32,
+    actions: &mut Vec<InsertAction>
 ) -> i32 {
     let batch = &schedule.batches[batch_index];
 
     if size_check(20, batch, cur_job) {
+        actions.push(InsertAction::InsertInBatch { batch_index, job_code: cur_job.code });
         return current_cost.min(find_cost_inserting_size_ok(
             schedule,
             batch_index,
@@ -34,22 +43,30 @@ pub fn find_cost_inserting_in_batch(
     };
 
     let (cost_of_current_batch, current_batch_completion) = compute_batch_cost_and_completion(&new_jobs, cur_job, completion_time);
-    let mut updated_current_cost = current_cost.min(cost_of_current_batch);
 
     // Base case: if there are no more batches, create a new batch for the popped job
     if batch_index + 1 >= schedule.batches.len() {
         let cost_of_new_batch =
             last_job.due_date as i32 - (current_batch_completion as i32 + last_job.processing_time as i32);
 
-        return updated_current_cost
+        actions.push(InsertAction::PopAndCreateNewBatch { batch_index, job_code: last_job.code });
+        return current_cost
             .min(cost_of_current_batch)
             .min(cost_of_new_batch);
     }
     let cost_of_moving_last_job_as_new_batch = compute_remaining_batch_cost(schedule, &last_job, batch_index+1, current_batch_completion);
-    updated_current_cost = updated_current_cost.min(cost_of_moving_last_job_as_new_batch);
-
     // Recursive case: try to insert the last_job into the next batch
-    find_cost_inserting_in_batch(schedule, batch_index + 1, &last_job, updated_current_cost)
+    let cost_of_inserting_in_next_batch = find_cost_inserting_in_batch(schedule, batch_index + 1, &last_job, current_cost.min(cost_of_current_batch), actions);
+
+    let updated_current_cost = cost_of_moving_last_job_as_new_batch.min(cost_of_inserting_in_next_batch);
+
+    if updated_current_cost == cost_of_moving_last_job_as_new_batch {
+        actions.push(InsertAction::PopAndCreateNewBatch { batch_index, job_code: last_job.code});
+        return cost_of_moving_last_job_as_new_batch;
+    } else {
+        actions.push(InsertAction::PopAndInsertInNextBatch { batch_index, job_code: last_job.code});
+        return cost_of_inserting_in_next_batch;
+    }
 }
 
 fn compute_remaining_batch_cost(schedule: &BatchSchedule, popped_job: &Job, batch_index: usize, prev_completion: u32) -> i32 {
