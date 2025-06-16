@@ -14,10 +14,10 @@ mod test {
         let mut batch2 = Batch::new(2);
         let mut new_batch = Batch::new(1);
 
-        batch1.insert_begin(job2);
-        batch2.insert_begin(job5);
-        batch2.insert_begin(job6);
-        new_batch.insert_begin(tester);
+        batch1.insert(job2);
+        batch2.insert(job5);
+        batch2.insert(job6);
+        new_batch.insert(tester);
 
         let mut result = BatchSchedule::new();
         result.insert_end(batch1.clone());
@@ -43,8 +43,8 @@ mod test {
         let mut batch1 = Batch::new(1);
         let mut new_batch = Batch::new(2);
 
-        batch1.insert_begin(job2);
-        new_batch.insert_begin(tester);
+        batch1.insert(job2);
+        new_batch.insert(tester);
 
         let mut input = BatchSchedule::new();
         input.insert_begin(batch1.clone());
@@ -71,13 +71,13 @@ mod test {
         let mut input_batch1 = Batch::new(1);
         let mut input_new_batch = Batch::new(2);
 
-        result_batch1.insert_begin(tester.clone());
-        result_batch2.insert_begin(job5.clone());
-        result_batch2.insert_begin(job6.clone());
+        result_batch1.insert(tester.clone());
+        result_batch2.insert(job5.clone());
+        result_batch2.insert(job6.clone());
 
-        input_batch1.insert_begin(job5);
-        input_batch1.insert_begin(job6);
-        input_new_batch.insert_begin(tester);
+        input_batch1.insert(job5);
+        input_batch1.insert(job6);
+        input_new_batch.insert(tester);
 
         let mut result = BatchSchedule::new();
         let mut input = BatchSchedule::new();

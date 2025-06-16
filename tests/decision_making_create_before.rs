@@ -12,8 +12,8 @@ mod test {
 
         let mut batch1 = Batch::new(1);
         let mut batch2 = Batch::new(2);
-        batch1.insert_end(job2);
-        batch2.insert_end(job5);
+        batch1.insert(job2);
+        batch2.insert(job5);
 
         let mut schedule = BatchSchedule::new();
         schedule.insert_begin(batch1);
@@ -38,9 +38,9 @@ mod test {
         let mut batch1 = Batch::new(1);
         let mut batch2 = Batch::new(2);
 
-        batch1.insert_begin(job2);
-        batch2.insert_begin(job5);
-        batch2.insert_begin(job6);
+        batch1.insert(job2);
+        batch2.insert(job5);
+        batch2.insert(job6);
 
         let mut schedule = BatchSchedule::new();
         schedule.insert_end(batch1);
@@ -70,12 +70,12 @@ mod test {
         let mut batch3 = Batch::new(3);
         let mut batch4 = Batch::new(4);
 
-        batch1.insert_begin(job2);
-        batch1.insert_begin(job10);
-        batch2.insert_begin(job8);
-        batch3.insert_begin(job1);
-        batch4.insert_begin(job5);
-        batch4.insert_begin(job6);
+        batch1.insert(job2);
+        batch1.insert(job10);
+        batch2.insert(job8);
+        batch3.insert(job1);
+        batch4.insert(job5);
+        batch4.insert(job6);
 
         let mut schedule = BatchSchedule::new();
         schedule.insert_begin(batch4);

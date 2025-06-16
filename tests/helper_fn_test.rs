@@ -22,14 +22,14 @@ mod tests {
         let mut batch5 = Batch::new(5);
         let mut batch6 = Batch::new(6);
 
-        batch1.insert_begin(job10);
-        batch1.insert_begin(job2);
-        batch2.insert_begin(job8);
-        batch3.insert_begin(job1);
-        batch4.insert_begin(job4);
-        batch5.insert_begin(job6);
-        batch5.insert_begin(job5);
-        batch6.insert_begin(job7);
+        batch1.insert(job10);
+        batch1.insert(job2);
+        batch2.insert(job8);
+        batch3.insert(job1);
+        batch4.insert(job4);
+        batch5.insert(job6);
+        batch5.insert(job5);
+        batch6.insert(job7);
 
         let mut schedule = BatchSchedule::new();
         schedule.insert_end(batch1);

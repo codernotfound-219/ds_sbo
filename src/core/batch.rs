@@ -25,44 +25,9 @@ impl Batch {
         }
     }
 
-    fn insert(&mut self, job: Job) {
-        let mut index = 0;
-
-        while index < self.jobs.len() {
-            if self.jobs[index].due_date > job.due_date {
-                self.jobs.insert(index, job);
-                return;
-            }
-
-            if self.jobs[index].due_date == job.due_date {
-                if self.jobs[index].processing_time > job.processing_time {
-                    self.jobs.insert(index, job);
-                    return;
-                }
-
-                if self.jobs[index].processing_time == job.processing_time {
-                    if self.jobs[index].size > job.size {
-                        self.jobs.insert(index, job);
-                        return;
-                    } else {
-                        self.jobs.insert(index, job);
-                        return;
-                    }
-                }
-            }
-            index += 1;
-        }
-
-        self.jobs.push(job);
-    }
-
-    pub fn insert_end(&mut self, job: Job) {
-        self.jobs.push(job);
-        self.update_batch_param();
-    }
-
-    pub fn insert_begin(&mut self, job: Job) {
-        self.jobs.insert(0, job);
+    pub fn insert(&mut self, job: Job) {
+        let idx = self.jobs.binary_search_by(|probe| probe.cmp(&job)).unwrap_or_else(|x| x);
+        self.jobs.insert(idx, job);
         self.update_batch_param();
     }
 
