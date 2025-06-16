@@ -20,18 +20,14 @@ pub fn find_cost_inserting_before(
         return find_cost_inserting_in_batch(schedule, batch_index - 1, job, i32::MAX, actions);
     }
 
-    return i32::MIN;
+    i32::MIN
 }
 
 fn priority_is_current(batch: &Batch, job: &Job) -> bool {
     let mut job_list = batch.jobs.clone();
 
     if let Some(last_job) = job_list.pop() {
-        if last_job.due_date >= job.due_date {
-            return false;
-        } else {
-            return true;
-        }
+        last_job.due_date < job.due_date
     } else {
         panic!("Tried to pop from empty batch in 'find_cost_inserting_before'");
     }

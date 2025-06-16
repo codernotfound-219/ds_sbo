@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test {
     use ds_sbo_rust::core::{Batch, BatchSchedule};
-    use ds_sbo_rust::greedy_dp::utils::{create_before, create_after, insert_last, create_end, insert_at_position};
+    use ds_sbo_rust::greedy_dp::utils::{create_before, create_after, create_end};
     use ds_sbo_rust::resources::problem2::*;
 
     #[test]
