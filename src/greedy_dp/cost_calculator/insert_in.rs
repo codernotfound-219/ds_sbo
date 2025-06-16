@@ -10,6 +10,7 @@ use crate::greedy_dp::size_check;
 //      -> returns the min_cost
 //
 
+#[derive(Debug, Clone)]
 pub enum InsertAction {
     InsertInBatch {batch_index: usize, job_code: u32},
     PopAndCreateNewBatch {batch_index: usize, job_code: u32},
@@ -62,10 +63,10 @@ pub fn find_cost_inserting_in_batch(
 
     if updated_current_cost == cost_of_moving_last_job_as_new_batch {
         actions.push(InsertAction::PopAndCreateNewBatch { batch_index, job_code: last_job.code});
-        return cost_of_moving_last_job_as_new_batch;
+        cost_of_moving_last_job_as_new_batch
     } else {
         actions.push(InsertAction::PopAndInsertInNextBatch { batch_index, job_code: last_job.code});
-        return cost_of_inserting_in_next_batch;
+        cost_of_inserting_in_next_batch
     }
 }
 

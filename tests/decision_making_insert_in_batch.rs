@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod test {
     use ds_sbo_rust::core::{Batch, BatchSchedule};
+    use ds_sbo_rust::greedy_dp::cost_calculator::InsertAction;
     use ds_sbo_rust::greedy_dp::{locate_eligible_batch, find_cost_inserting_in_batch};
     use ds_sbo_rust::resources::problem2::*;
 
@@ -31,9 +32,11 @@ mod test {
         schedule.insert_begin(batch3);
         schedule.insert_begin(batch2);
         schedule.insert_begin(batch1);
+        let mut actions: Vec<InsertAction> = Vec::new();
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, tester.due_date) {
-            let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX);
+            let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX, &mut actions);
+            println!("{:#?}", actions);
             assert_eq!(batch_index, 3, "Failed index");
             assert_eq!(cost, 0, "Failed cost");
         } else {
@@ -62,9 +65,11 @@ mod test {
         schedule.insert_end(batch1);
         schedule.insert_end(batch2);
         schedule.insert_end(batch3);
+        let mut actions: Vec<InsertAction> = Vec::new();
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, tester.due_date) {
-            let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX);
+            let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX, &mut actions);
+            println!("{:#?}", actions);
             assert_eq!(batch_index, 0);
             assert_eq!(cost, 5);
         } else {
@@ -89,9 +94,11 @@ mod test {
         let mut schedule = BatchSchedule::new();
         schedule.insert_end(batch1);
         schedule.insert_end(batch2);
+        let mut actions: Vec<InsertAction> = Vec::new();
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, tester.due_date) {
-            let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX);
+            let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX, &mut actions);
+            println!("{:#?}", actions);
             assert_eq!(batch_index, 1);
             assert_eq!(cost, 14);
         } else {
@@ -124,9 +131,11 @@ mod test {
         schedule.insert_begin(batch3);
         schedule.insert_begin(batch2);
         schedule.insert_begin(batch1);
+        let mut actions: Vec<InsertAction> = Vec::new();
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, tester.due_date) {
-            let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX);
+            let cost = find_cost_inserting_in_batch(&schedule, batch_index, &tester, i32::MAX, &mut actions);
+            println!("{:#?}", actions);
             assert_eq!(batch_index, 0, "Failed index");
             assert_eq!(cost, 4, "Failed cost");
         } else {
