@@ -45,7 +45,6 @@ For each remaining job in set **V**:
 ### Step 4: Termination
 Repeat **Step 3** until set **V** is empty (all jobs have been processed and assigned to batches).
 
+## Limitations and Considerations
 
-## Algorithm Complexity
-- **Time Complexity**: O(n²) where n is the number of jobs
-- **Space Complexity**: O(n) for storing jobs and batches
+1. **Greedy Nature**: The algorithm makes locally optimal decisions that may not lead to the globally optimal solution, as it cannot anticipate the impact of future job assignments.

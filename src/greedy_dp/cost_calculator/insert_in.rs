@@ -43,6 +43,7 @@ pub fn find_cost_inserting_in_batch(
         schedule.batches[batch_index-1].completion_time
     };
 
+    // Cost of placing cur_job in cur_batch after popping the last_job of the batch.
     let (cost_of_current_batch, current_batch_completion) = compute_batch_cost_and_completion(&new_jobs, cur_job, completion_time);
 
     // Base case: if there are no more batches, create a new batch for the popped job
@@ -50,6 +51,7 @@ pub fn find_cost_inserting_in_batch(
         let cost_of_new_batch =
             last_job.due_date as i32 - (current_batch_completion as i32 + last_job.processing_time as i32);
 
+        actions.push(InsertAction::InsertInBatch { batch_index, job_code: cur_job.code });
         actions.push(InsertAction::PopAndCreateNewBatch { batch_index, job_code: last_job.code });
         return current_cost
             .min(cost_of_current_batch)
@@ -61,6 +63,7 @@ pub fn find_cost_inserting_in_batch(
 
     let updated_current_cost = cost_of_moving_last_job_as_new_batch.min(cost_of_inserting_in_next_batch);
 
+    actions.push(InsertAction::InsertInBatch { batch_index, job_code: cur_job.code });
     if updated_current_cost == cost_of_moving_last_job_as_new_batch {
         actions.push(InsertAction::PopAndCreateNewBatch { batch_index, job_code: last_job.code});
         cost_of_moving_last_job_as_new_batch

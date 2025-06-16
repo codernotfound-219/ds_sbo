@@ -18,13 +18,13 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
         let current = list.pop().expect("ERROR: expected a job in the sorted list");
 
         if let Some(batch_index) = locate_eligible_batch(&schedule, current.due_date) {
-                let result = make_decision(&schedule, batch_index, &current);
-
-                match result {
-                    Decision::CreateAfter(_) => {create_after(&mut schedule, batch_index, current);},
-                    Decision::CreateBefore(_) => {create_before(&mut schedule, batch_index, current);},
-                    Decision::InsertAtPosition(_) => {insert_at_position(&mut schedule, batch_index, current);},
-                }
+            //     let result = make_decision(&schedule, batch_index, &current);
+            //
+            //     match result {
+            //         Decision::CreateAfter(_) => {create_after(&mut schedule, batch_index, current);},
+            //         Decision::CreateBefore(_) => {create_before(&mut schedule, batch_index, current);},
+            //         Decision::InsertAtPosition(_) => {insert_at_position(&mut schedule, batch_index, current);},
+            //     }
             } else {
                 let result = make_end_decision(&schedule, &current);
 

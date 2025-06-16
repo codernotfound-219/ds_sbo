@@ -1,5 +1,20 @@
 use crate::core::{Job, BatchSchedule, Batch};
-use super::helper::size_check;
+use super::{cost_calculator::InsertAction, helper::size_check};
+
+// pub fn insert_before(schedule: &mut BatchSchedule, batch_index: usize, job: Job, actions: &Vec<InsertAction>) {
+//
+//     for action in actions.iter() {
+//         match action {
+//             &InsertAction::InsertInBatch { batch_index, job_code } => {
+//                 if job.code == job_code {
+//                     schedule.batches[batch_index].insert_end(job);
+//                 }
+//             },
+//             &InsertAction::PopAndCreateNewBatch { batch_index, job_code }
+//             &InsertAction::PopAndInsertInNextBatch { batch_index, job_code }
+//         }
+//     }
+// }
 
 pub fn create_after(schedule: &mut BatchSchedule, batch_index: usize, job: Job) {
     let batch = &schedule.batches[batch_index];
