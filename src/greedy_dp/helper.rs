@@ -6,10 +6,18 @@ use crate::core::{Batch, BatchSchedule, Job};
 // due_date.
 
 pub fn locate_eligible_batch(schedule: &BatchSchedule, due: u32) -> Option<usize> {
+    let min_index = schedule
+        .batches
+        .iter()
+        .enumerate()
+        .min_by_key(|(_, batch)| batch.min_due_time)
+        .map(|(index, _)| index)?;
+
     schedule
         .batches
         .iter()
         .enumerate()
+        .skip(min_index)
         .find(|(_, batch)| batch.min_due_time >= due)
         .map(|(index, _)| index)
 }
