@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod test {
-    use ds_sbo_rust::core::{Batch, BatchSchedule, Job};
+    use ds_sbo_rust::core::Job;
     use ds_sbo_rust::greedy_dp::solve;
     use ds_sbo_rust::resources::problem1::*;
 
@@ -19,7 +19,8 @@ mod test {
 
         let mut list: Vec<Job> = vec![job1, job2, job3, job4, job5, job6, job7, job8, job9, job10];
         let output = solve(&mut list);
+        let answer = greed_dp_solution();
 
-        let answer = BatchSchedule::new();
+        assert_eq!(output, answer);
     }
 }
