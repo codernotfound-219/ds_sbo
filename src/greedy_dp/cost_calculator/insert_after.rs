@@ -11,7 +11,7 @@ pub fn find_cost_inserting_after(
     job: &Job,
     actions: &mut Vec<InsertAction>,
 ) -> i32 {
-    if batch_index-1 == schedule.batches.len() {
+    if batch_index+1 >= schedule.batches.len() {
         return i32::MIN;
     }
     find_cost_inserting_in_batch(schedule, batch_index+1, job, i32::MAX, actions)
