@@ -1,7 +1,8 @@
 use std::fmt;
 use std::cmp::Reverse;
+use std::cmp::Ordering;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Job {
     pub code: u32,
     pub release_date: u32,
@@ -23,6 +24,21 @@ impl Job {
 
     pub fn sort_release_date(list: &mut [Job]) {
         list.sort_by_key(|job| Reverse(job.release_date));
+    }
+}
+
+impl Ord for Job {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.due_date
+            .cmp(&other.due_date)
+            .then(self.processing_time.cmp(&other.processing_time))
+            .then(self.size.cmp(&other.size))
+    }
+}
+
+impl PartialOrd for Job {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
