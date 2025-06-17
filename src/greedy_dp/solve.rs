@@ -1,4 +1,4 @@
-use super::{EndDecision, Decision};
+use super::{Decision, EndDecision, InsertAction};
 use crate::core::{Job, Batch, BatchSchedule};
 use super::{locate_eligible_batch, make_decision, make_end_decision};
 use super::utils::{create_end, create_after, create_before, insert_last, insert_at_position};
@@ -28,12 +28,13 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
                     Decision::InsertAfter(_, actions) => {insert_at_position(&mut schedule, current, &actions);},
                 }
             } else {
-                // let result = make_end_decision(&schedule, &current);
-                //
-                // match result {
-                //     EndDecision::CreateAfter(_) => {create_end(&mut schedule, current);},
-                //     EndDecision::InsertAtLast(_) => {insert_last(&mut schedule, current);},
-                // }
+                let mut actions: Vec<InsertAction> = Vec::new();
+                let result = make_end_decision(&schedule, &current, &mut actions);
+
+                match result {
+                    EndDecision::CreateAfter(_) => {create_end(&mut schedule, current);},
+                    EndDecision::InsertAtLast(_) => {insert_last(&mut schedule, current);},
+                }
             }
     }
 

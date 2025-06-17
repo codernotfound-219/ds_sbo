@@ -10,8 +10,8 @@ pub enum Decision {
 }
 
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Debug)]
 pub enum EndDecision {
-    InsertAtLast(i32),
+    InsertAtLast(i32, Vec<InsertAction>),
     CreateAfter(i32),
 }
