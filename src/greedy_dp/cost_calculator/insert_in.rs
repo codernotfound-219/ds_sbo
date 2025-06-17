@@ -10,7 +10,7 @@ use crate::greedy_dp::size_check;
 //      -> returns the min_cost
 //
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum InsertAction {
     InsertInBatch {batch_index: usize, job_code: u32},
     PopAndCreateNewBatch {batch_index: usize, job_code: u32},

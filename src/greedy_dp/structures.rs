@@ -1,6 +1,6 @@
 use super::cost_calculator::InsertAction;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Decision {
     InsertBefore(i32, Vec<InsertAction>),
     CreateBefore(i32),
@@ -10,7 +10,7 @@ pub enum Decision {
 }
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum EndDecision {
     InsertAtLast(i32, Vec<InsertAction>),
     CreateAfter(i32),

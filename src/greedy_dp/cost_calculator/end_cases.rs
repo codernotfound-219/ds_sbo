@@ -97,9 +97,8 @@ fn find_cost_creating_after_end(schedule: &BatchSchedule, cur_job: &Job) -> i32 
 
     let release_date = last_batch.completion_time.max(cur_job.release_date);
     let completion = release_date + cur_job.processing_time;
-    let cost = cur_job.due_date as i32 - completion as i32;
 
-    cost
+    cur_job.due_date as i32 - completion as i32
 }
 
 // TODO: Subject to improvement
