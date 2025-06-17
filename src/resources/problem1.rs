@@ -39,19 +39,18 @@ pub fn greed_dp_solution() -> BatchSchedule {
     let mut batch4 = Batch::new(4);
     let mut batch5 = Batch::new(5);
     let mut batch6 = Batch::new(6);
-    let mut batch7 = Batch::new(7);
     let mut schedule = BatchSchedule::new();
 
     batch1.insert(job5());
-    batch2.insert(job3());
+    batch1.insert(job6());
+    batch2.insert(job7());
     batch3.insert(job8());
     batch3.insert(job4());
-    batch4.insert(job7());
+    batch4.insert(job9());
     batch4.insert(job1());
-    batch5.insert(job9());
     batch5.insert(job2());
-    batch6.insert(job10());
-    batch7.insert(job3());
+    batch5.insert(job10());
+    batch6.insert(job3());
 
     schedule.insert_end(batch1);
     schedule.insert_end(batch2);
@@ -59,7 +58,6 @@ pub fn greed_dp_solution() -> BatchSchedule {
     schedule.insert_end(batch4);
     schedule.insert_end(batch5);
     schedule.insert_end(batch6);
-    schedule.insert_end(batch7);
 
     schedule
 }

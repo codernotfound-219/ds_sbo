@@ -1,11 +1,11 @@
 #[cfg(test)]
 mod test {
     use ds_sbo_rust::core::{Batch, BatchSchedule, Job};
-    use ds_sbo_rust::greedy_dp::{locate_eligible_batch, solve};
+    use ds_sbo_rust::greedy_dp::solve;
     use ds_sbo_rust::resources::problem1::*;
 
     #[test]
-    fn test_step3() {
+    fn test_insertion_job8() {
         let job1 = job1();
         let job5 = job5();
         let job6 = job6();
@@ -20,20 +20,18 @@ mod test {
         let mut batch2 = Batch::new(2);
         let mut batch3 = Batch::new(3);
         let mut batch4 = Batch::new(4);
-        let mut batch5 = Batch::new(5);
         let mut schedule = BatchSchedule::new();
 
         batch1.insert(job5);
+        batch1.insert(job6);
         batch2.insert(job7);
         batch3.insert(job8);
-        batch4.insert(job6);
         batch4.insert(job1);
-        batch5.insert(job10);
+        batch4.insert(job10);
         schedule.insert_end(batch1);
         schedule.insert_end(batch2);
         schedule.insert_end(batch3);
         schedule.insert_end(batch4);
-        schedule.insert_end(batch5);
 
         println!("{}", output);
         assert_eq!(output, schedule);
