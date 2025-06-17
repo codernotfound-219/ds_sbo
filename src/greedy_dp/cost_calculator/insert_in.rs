@@ -118,7 +118,7 @@ fn find_cost_inserting_size_ok(schedule: &BatchSchedule, batch_index: usize, job
     cost_inserting.min(min_cost)
 }
 
-fn compute_batch_cost_and_completion(batch_list: &[Job], cur_job: &Job, release_date: u32) -> (i32, u32) {
+pub fn compute_batch_cost_and_completion(batch_list: &[Job], cur_job: &Job, release_date: u32) -> (i32, u32) {
     let mut max_release = cur_job.release_date.max(release_date);
     let mut max_processing = cur_job.processing_time;
     let mut min_due = cur_job.due_date;

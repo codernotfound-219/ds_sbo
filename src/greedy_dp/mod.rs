@@ -14,6 +14,7 @@ pub use helper::locate_eligible_batch;
 
 pub use cost_calculator::make_end_decision;
 pub use cost_calculator::make_decision;
+pub use cost_calculator::compute_batch_cost_and_completion;
 
 // FOR TESTING
 pub use cost_calculator::find_cost_creating_after;
