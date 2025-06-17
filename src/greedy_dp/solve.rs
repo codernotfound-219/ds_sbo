@@ -28,12 +28,12 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
                     Decision::InsertAfter(_, actions) => {insert_at_position(&mut schedule, current, &actions);},
                 }
             } else {
-                let result = make_end_decision(&schedule, &current);
-
-                match result {
-                    EndDecision::CreateAfter(_) => {create_end(&mut schedule, current);},
-                    EndDecision::InsertAtLast(_) => {insert_last(&mut schedule, current);},
-                }
+                // let result = make_end_decision(&schedule, &current);
+                //
+                // match result {
+                //     EndDecision::CreateAfter(_) => {create_end(&mut schedule, current);},
+                //     EndDecision::InsertAtLast(_) => {insert_last(&mut schedule, current);},
+                // }
             }
     }
 

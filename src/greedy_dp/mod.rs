@@ -20,3 +20,4 @@ pub use cost_calculator::compute_batch_cost_and_completion;
 pub use cost_calculator::find_cost_creating_after;
 pub use cost_calculator::find_cost_creating_before;
 pub use cost_calculator::find_cost_inserting_in_batch;
+pub use cost_calculator::InsertAction;

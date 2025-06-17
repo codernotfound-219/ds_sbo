@@ -64,7 +64,7 @@ pub fn make_end_decision(
 // TODO: Subject to improvement
 // - What if the both jobs have the same due date?
 fn first_priority(current_job: &Job, other_job: &Job) -> bool {
-    current_job.due_date > other_job.due_date
+    current_job.due_date <= other_job.due_date
 }
 
 // pub fn make_end_decision(schedule: &BatchSchedule, job: &Job) -> EndDecision {
