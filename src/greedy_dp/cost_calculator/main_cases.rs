@@ -36,11 +36,11 @@ pub fn make_decision(schedule: &BatchSchedule, batch_index: usize, job: &Job) ->
     let cost_creating_after = find_cost_creating_after(schedule, batch_index, job);
 
     let options = [
-        (cost_creating_before, Decision::CreateBefore(cost_creating_before)),
-        (cost_creating_after, Decision::CreateAfter(cost_creating_after)),
         (cost_inserting_before, Decision::InsertBefore(cost_creating_before, insert_before_actions)),
         (cost_inserting_in, Decision::InsertAtPosition(cost_inserting_in, insert_in_actions)),
         (cost_inserting_after, Decision::InsertAfter(cost_inserting_in, insert_after_actions)),
+        (cost_creating_before, Decision::CreateBefore(cost_creating_before)),
+        (cost_creating_after, Decision::CreateAfter(cost_creating_after)),
     ];
 
     let (_, decision) = options
