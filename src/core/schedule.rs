@@ -37,7 +37,7 @@ impl BatchSchedule {
         self.update_parameters(index);
     }
 
-    fn update_parameters(&mut self, index: usize) {
+    pub fn update_parameters(&mut self, index: usize) {
         let (mut prev_completion, mut prev_code) = if index == 0 {
             (0, 0)
         } else {

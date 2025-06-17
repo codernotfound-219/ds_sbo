@@ -1,7 +1,7 @@
 use crate::core::{Job, BatchSchedule, Batch};
 use super::cost_calculator::InsertAction;
 
-pub fn insert_at_position(schedule: &mut BatchSchedule, job: Job, actions: &[InsertAction]) {
+pub fn employ_insert_action(schedule: &mut BatchSchedule, job: Job, actions: &[InsertAction]) {
     match actions[0] {
         InsertAction::InsertInBatch { batch_index, job_code } => {
             if job.code != job_code {
@@ -9,6 +9,8 @@ pub fn insert_at_position(schedule: &mut BatchSchedule, job: Job, actions: &[Ins
             }
             
             schedule.batches[batch_index].insert(job);
+            schedule.update_parameters(batch_index);        // Update params as job was inserted
+            // and not batch
         },
         InsertAction::PopAndCreateNewBatch { batch_index: _, job_code: _ } => {
             panic!("First action is not insertion of cur_job")
@@ -28,6 +30,7 @@ pub fn insert_at_position(schedule: &mut BatchSchedule, job: Job, actions: &[Ins
                     if popped_job.code != *job_code {
                         panic!("Job code didnt match for InsertAction::PopAndCreateNewBatch, batch_index: {}, job_code: {}", batch_index, job_code);
                     }
+                    schedule.update_parameters(*batch_index);        // Update params as job was popped
 
                     let mut batch = Batch::new(batch_index+2);
                     batch.insert(popped_job);
@@ -41,8 +44,11 @@ pub fn insert_at_position(schedule: &mut BatchSchedule, job: Job, actions: &[Ins
                     if popped_job.code != *job_code {
                         panic!("Job code didnt match for InsertAction::PopAndInsertInNextBatch, batch_index: {}, job_code: {}", batch_index, job_code);
                     }
+                    schedule.update_parameters(*batch_index);        // Update params as job was popped
 
                     schedule.batches[batch_index+1].insert(popped_job);
+                    schedule.update_parameters(batch_index+1);              // update_params as job
+                    // was inserted and not batch
                 } else {
                     panic!("Popped from an empty batch in fn: insert_before");
                 }
