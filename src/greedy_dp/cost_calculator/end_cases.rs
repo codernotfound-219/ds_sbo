@@ -1,14 +1,12 @@
+use super::InsertAction;
 use crate::core::{BatchSchedule, Job};
 use crate::greedy_dp::{size_check, compute_batch_cost_and_completion, EndDecision};
-
-use super::InsertAction;
 
 // NOTE:
 // This function handles the case when there are no eligible batches found:
 // 1. create_new_batch at the end
 // 2. Insert at the previous position
 // It returns the decision with the maximum difference
-
 
 pub fn make_end_decision(schedule: &BatchSchedule, job: &Job) -> EndDecision {
     let mut insert_end_actions: Vec<InsertAction> = Vec::new();
@@ -38,7 +36,6 @@ pub fn make_end_decision(schedule: &BatchSchedule, job: &Job) -> EndDecision {
 
     decision.clone()
 }
-
 
 fn find_cost_inserting_at_last(schedule: &BatchSchedule, cur_job: &Job, actions: &mut Vec<InsertAction>) -> i32 {
     let last_batch = match schedule.batches.last() {
