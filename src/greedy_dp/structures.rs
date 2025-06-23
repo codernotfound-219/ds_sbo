@@ -11,3 +11,13 @@ pub struct DecisionHistory {
     pub decision: Decision,
     pub past_actions: Vec<Decision>,
 }
+
+impl DecisionHistory {
+    pub fn new(deviation: i32, decision: Decision) -> Self {
+        DecisionHistory {
+            deviation,
+            decision,
+            past_actions: Vec::new(),
+        }
+    }
+}

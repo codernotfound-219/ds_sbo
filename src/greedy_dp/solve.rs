@@ -14,7 +14,20 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     schedule
 }
 
-pub fn recurse(k: u32, schedule: &BatchSchedule, job: &Job) -> Vec<DecisionHistory> {
-    let decision_set: Vec<DecisionHistory> = Vec::new();
+pub fn recurse(k: usize, schedule: &BatchSchedule, job: &Job) -> Vec<DecisionHistory> {
+    let mut decision_set: Vec<DecisionHistory> = Vec::new();
+
+    if k > schedule.batches.len() {
+        let release_date = job.release_date.max(schedule.batches[schedule.batches.len() - 1].completion_time);
+        let completion = release_date + job.processing_time;
+        let deviation = job.due_date as i32 - completion as i32;
+
+        decision_set.push( DecisionHistory::new(
+            deviation,
+            Decision::CreateEnd { job_code: job.code },
+        ));
+
+        return decision_set;
+    }
     decision_set
 }
