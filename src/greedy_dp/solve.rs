@@ -28,7 +28,6 @@ pub fn recurse(k: usize, schedule: &BatchSchedule, job: &Job) -> Vec<DecisionHis
 
         decision_set.push(DecisionHistory::new(
             deviation,
-            Decision::CreateEnd { job_code: job.code },
         ));
 
         return decision_set;
@@ -44,14 +43,4 @@ pub fn recurse(k: usize, schedule: &BatchSchedule, job: &Job) -> Vec<DecisionHis
     }
 
     decision_set
-}
-
-fn insert_in(batch_index: usize, schedule: &BatchSchedule, job: &Job) -> i32 {
-    let batch = &schedule.batches[batch_index];
-    let release_date = job.release_date.max(batch.release_date);
-    let processing = job.processing_time.max(batch.processing_time);
-    let completion = release_date + processing;
-    let due = job.due_date.min(batch.min_due_time);
-
-    let deviation = due as i32 - completion as i32;
 }

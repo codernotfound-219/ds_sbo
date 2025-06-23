@@ -5,19 +5,24 @@ pub enum Decision {
     CreateEnd { job_code: u32 },
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum InsertAction {
+    InsertInBatch { batch_code: usize, job_code: u32 },
+    PopAndCreateBatch { from_batch: usize, job_code: u32, at_pos: usize },
+    PopAndInsertInBatch { from_batch: usize, job_code: u32, to_batch: usize },
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct DecisionHistory {
-    pub deviation: i32,
-    pub decision: Decision,
-    pub past_actions: Vec<Decision>,
+    deviation: i32,
+    actions: Option<Vec<InsertAction>>,
 }
 
 impl DecisionHistory {
-    pub fn new(deviation: i32, decision: Decision) -> Self {
+    pub fn new(deviation: i32) -> Self {
         DecisionHistory {
             deviation,
-            decision,
-            past_actions: Vec::new(),
+            actions: None,
         }
     }
 }

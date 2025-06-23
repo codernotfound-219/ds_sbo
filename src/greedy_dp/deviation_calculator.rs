@@ -1,5 +1,5 @@
-use crate::core::{BatchSchedule, Batch, Job};
-use crate::resources::BATCH_CAPACITY;
+use crate::core::{BatchSchedule, Job};
+use super::size_check;
 
 // NOTE:
 // this function calculates the deviation as defined the report, from the given batch index
@@ -32,14 +32,16 @@ fn calculate_deviation(
 }
 
 fn insert_in(batch_index: usize, schedule: &BatchSchedule, job: &Job) -> i32 {
-    if size_check(BATCH_CAPACITY, &schedule.batches[batch_index], job) {
+    if size_check(&schedule.batches[batch_index], job) {
         return insert_in_size_ok(batch_index, schedule, job);
     }
-    0
-}
 
-fn size_check(bc: u32, batch: &Batch, job: &Job) -> bool {
-    batch.size + job.size <= bc
+    let mut job_list: Vec<Job> = schedule.batches[batch_index].jobs.clone();
+
+    if job_list.is_empty() { panic!("Tried to pop from an empty batch!"); }
+    let lp_job = job_list.pop().unwrap();
+
+    0 // to_change 
 }
 
 fn insert_in_size_ok(batch_index: usize, schedule: &BatchSchedule, job: &Job) -> i32 {
