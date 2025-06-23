@@ -13,7 +13,7 @@ ds_sbo_rust/
 │   ├── main.rs         ← example binary: prints job list
 │   ├── lib.rs          ← library entry point
 │   ├── core/           ← scheduling model (Job, Batch, BatchSchedule, handlers)
-│   ├── greedy_dp/     ← cost-driven batching (helper, cost_calculator, solve)
+│   ├── greedy/         ← cost-driven batching (helper, cost_calculator, solve)
 │   └── resources/      ← job definitions for problem instances
 └── tests/              ← unit tests for each decision and cost function
 ```
@@ -27,7 +27,7 @@ Defines the basic data structures:
 - `BatchSchedule` – sequence of batches with rolling completion times  
 - `handlers` – logs and generic decision enums  
 
-### greedy_dp  
+### greedy  
 A cost-based approach:
 - `helper::locate_eligible_batch` – find candidate batch by due date  
 - `cost_calculator` – compute slack/lateness for inserting, creating before/after, end cases  
@@ -58,7 +58,7 @@ As a library, import and call the solver:
 
 ```rust
 use ds_sbo_rust::core::Job;
-use ds_sbo_rust::greedy_dp::solve;
+use ds_sbo_rust::greedy::solve;
 
 let mut jobs = vec![
     Job::new(1, 0, 10, 3, 2),
