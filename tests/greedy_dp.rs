@@ -5,7 +5,7 @@ mod test {
     use ds_sbo_rust::resources::problem1::*;
 
     #[test]
-    fn test_insertion_job2() {
+    fn test_insertion_job9() {
         let job1 = job1();
         let job2 = job2();
         let job4 = job4();
@@ -13,6 +13,7 @@ mod test {
         let job6 = job6();
         let job7 = job7();
         let job8 = job8();
+        let job9 = job9();
         let job10 = job10();
 
         let mut list: Vec<Job> = vec![
@@ -23,6 +24,7 @@ mod test {
             job6.clone(),
             job7.clone(),
             job8.clone(),
+            job9.clone(),
             job10.clone(),
         ];
         let output = solve(&mut list);
@@ -39,8 +41,9 @@ mod test {
         batch2.insert(job7);
         batch3.insert(job8);
         batch3.insert(job4);
+        batch4.insert(job9);
         batch4.insert(job1);
-        batch4.insert(job2);
+        batch5.insert(job2);
         batch5.insert(job10);
 
         schedule.insert_end(batch1);
