@@ -1,5 +1,7 @@
 use ds_sbo_rust::core::Job;
 
+static BATCH_CAPACITY: u32 = 20;
+
 fn main() {
     let job1 = Job::new(1, 1, 29, 9, 9);
     let job2 = Job::new(2, 16, 31, 4, 7);

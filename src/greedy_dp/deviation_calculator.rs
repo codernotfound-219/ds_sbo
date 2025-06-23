@@ -1,4 +1,5 @@
-use crate::core::{BatchSchedule, Job};
+use crate::core::{BatchSchedule, Batch, Job};
+use crate::resources::BATCH_CAPACITY;
 
 // NOTE:
 // this function calculates the deviation as defined the report, from the given batch index
@@ -31,6 +32,17 @@ fn calculate_deviation(
 }
 
 fn insert_in(batch_index: usize, schedule: &BatchSchedule, job: &Job) -> i32 {
+    if size_check(BATCH_CAPACITY, &schedule.batches[batch_index], job) {
+        return insert_in_size_ok(batch_index, schedule, job);
+    }
+    0
+}
+
+fn size_check(bc: u32, batch: &Batch, job: &Job) -> bool {
+    batch.size + job.size <= bc
+}
+
+fn insert_in_size_ok(batch_index: usize, schedule: &BatchSchedule, job: &Job) -> i32 {
     let batch = &schedule.batches[batch_index];
     let release_date = job.release_date.max(batch.release_date);
     let processing = job.processing_time.max(batch.processing_time);
