@@ -1,5 +1,5 @@
 use crate::core::{Job, BatchSchedule};
-use crate::greedy_dp::size_check;
+use crate::greedy::size_check;
 
 // NOTE:
 // This function calculates the cost of inserting at position:

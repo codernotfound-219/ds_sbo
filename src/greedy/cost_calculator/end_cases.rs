@@ -1,6 +1,6 @@
 use super::InsertAction;
 use crate::core::{BatchSchedule, Job};
-use crate::greedy_dp::{size_check, compute_batch_cost_and_completion, EndDecision};
+use crate::greedy::{size_check, compute_batch_cost_and_completion, EndDecision};
 
 // NOTE:
 // This function handles the case when there are no eligible batches found:

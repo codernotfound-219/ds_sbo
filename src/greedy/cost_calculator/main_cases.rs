@@ -1,4 +1,4 @@
-use crate::{core::{BatchSchedule, Job}, greedy_dp::Decision};
+use crate::{core::{BatchSchedule, Job}, greedy::Decision};
 use super::{find_cost_creating_after, find_cost_creating_before, find_cost_inserting_after, find_cost_inserting_before, find_cost_inserting_in_batch, InsertAction};
 
 // NOTE:
