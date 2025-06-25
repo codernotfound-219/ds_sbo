@@ -1,8 +1,7 @@
 use std::cmp::Ordering;
 
 use super::utils::{calculate_deviation, size_check};
-use super::{create_end, create_in};
-use crate::core::{BatchSchedule, Job};
+use crate::{core::{BatchSchedule, Job}, greedy_dp::{Decision, Log}};
 
 fn compute_current_deviation(list: &[Job], job: &Job, prev_completion: u32) -> (i32, u32) {
     let release_date = prev_completion
@@ -51,7 +50,7 @@ pub fn insert_in(
     schedule: &BatchSchedule,
     job: &Job,
     prev_completion: u32,
-) -> Vec<i32> {
+) -> Vec<Log> {
     insert_in_helper(batch_index, schedule, job, prev_completion, None)
 }
 
@@ -61,8 +60,8 @@ pub fn insert_in_helper(
     job: &Job,
     prev_completion: u32,
     updated_completion_at_index: Option<(usize, u32)>,
-) -> Vec<i32> {
-    let mut set_m: Vec<i32> = Vec::new();
+) -> Vec<Log> {
+    let mut set_m: Vec<Log> = Vec::new();
 
     // Handle case where we go beyond all existing batches
     if batch_index >= schedule.batches.len() {
@@ -70,7 +69,12 @@ pub fn insert_in_helper(
         let completion = release_date + job.processing_time;
         let net_deviation = job.due_date as i32 - completion as i32;
 
-        set_m.push(net_deviation);
+        set_m.push(
+            Log::new(
+                net_deviation,
+                Decision::CreateEnd { job_code: job.code },
+            )
+        );
         return set_m;
     }
 
@@ -90,12 +94,22 @@ pub fn insert_in_helper(
 
             match lp_job.cmp(job) {
                 Ordering::Less | Ordering::Equal => { 
-                    set_m.push(i32::MIN); 
+                    set_m.push(
+                        Log::new(
+                            i32::MIN,
+                            Decision::NotPossible,
+                        )
+                    );
                 },
                 Ordering::Greater => {
                     // Calculate deviation for inserting job in current batch (after removing lp_job)
                     let (current_deviation, completion) = compute_current_deviation(&job_list, job, current_prev_completion); // prev_completion remains 0
-                    set_m.push(current_deviation);
+                    set_m.push(
+                        Log::new(
+                            current_deviation,
+                            Decision::InsertIn { batch_index: index, job_code: job.code },
+                        )
+                    );
 
                     // Recursively handle the displaced job
                     let recursive_results = insert_in_helper(index + 1, schedule, &lp_job, completion, Some((index, completion)));
@@ -105,7 +119,12 @@ pub fn insert_in_helper(
         } else {
             // Size check passed - can insert directly
             let net_deviation = insert_in_size_ok(index, schedule, job, current_prev_completion);
-            set_m.push(net_deviation) 
+            set_m.push(
+                Log::new(
+                    net_deviation,
+                    Decision::InsertIn { batch_index: index, job_code: job.code },
+                )
+            );
         }
         
         // Add result for creating new batch at this position (for every index)

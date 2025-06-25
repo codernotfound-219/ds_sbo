@@ -1,4 +1,3 @@
-use super::{deviation_calculator, Decision, DecisionHistory};
 use crate::core::{Batch, BatchSchedule, Job};
 
 pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
@@ -14,33 +13,4 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     schedule.insert_begin(batch);
 
     schedule
-}
-
-pub fn recurse(k: usize, schedule: &BatchSchedule, job: &Job) -> Vec<DecisionHistory> {
-    let mut decision_set: Vec<DecisionHistory> = Vec::new();
-
-    if k >= schedule.batches.len() {
-        let release_date = job
-            .release_date
-            .max(schedule.batches[schedule.batches.len() - 1].completion_time);
-        let completion = release_date + job.processing_time;
-        let deviation = job.due_date as i32 - completion as i32;
-
-        decision_set.push(DecisionHistory::new(
-            deviation,
-        ));
-
-        return decision_set;
-    }
-
-    for index in k..schedule.batches.len() {
-        let batch = &schedule.batches[index];
-        // TODO:  find deviation
-        // 1. insert in 
-        // 2. create in
-        
-        let deviation_create_in = deviation_calculator::create_in(index, schedule, job);
-    }
-
-    decision_set
 }

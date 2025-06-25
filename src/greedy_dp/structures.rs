@@ -1,28 +1,22 @@
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Decision {
-    InsertIn { batch_index: u32, job_code: u32 },
-    CreateAt { batch_index: u32, job_code: u32 },
+    InsertIn { batch_index: usize, job_code: u32 },
+    CreateAt { batch_index: usize, job_code: u32 },
     CreateEnd { job_code: u32 },
+    NotPossible,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub enum InsertAction {
-    InsertInBatch { batch_code: usize, job_code: u32 },
-    PopAndCreateBatch { from_batch: usize, job_code: u32, at_pos: usize },
-    PopAndInsertInBatch { from_batch: usize, job_code: u32, to_batch: usize },
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct DecisionHistory {
+pub struct Log {
     deviation: i32,
-    actions: Option<Vec<InsertAction>>,
+    action: Decision,
 }
 
-impl DecisionHistory {
-    pub fn new(deviation: i32) -> Self {
-        DecisionHistory {
-            deviation,
-            actions: None,
+impl Log {
+    pub fn new(deviation: i32, action: Decision) -> Self {
+        Log {
+            deviation, 
+            action,
         }
     }
 }

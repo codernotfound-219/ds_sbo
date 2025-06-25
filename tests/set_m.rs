@@ -2,6 +2,8 @@
 mod test {
     use ds_sbo_rust::core::{Batch, BatchSchedule};
     use ds_sbo_rust::greedy_dp::deviation_calculator::insert_in;
+    use ds_sbo_rust::greedy_dp::structures::Log;
+    use ds_sbo_rust::greedy_dp::Decision;
     use ds_sbo_rust::resources::problem1::*;
 
     #[test]
@@ -19,7 +21,17 @@ mod test {
         schedule.insert_end(batch1);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        assert_eq!(set_m, vec![8, 6]);
+        let solution = vec![
+            Log::new(
+                8,
+                Decision::InsertIn { batch_index: 0, job_code: 5 },
+            ),
+            Log::new(
+                6,
+                Decision::CreateEnd { job_code: 1 },
+            ),
+        ];
+        assert_eq!(set_m, solution);
     }
 
     #[test]
@@ -48,7 +60,36 @@ mod test {
         schedule.insert_end(batch3);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        let solution = vec![3, -19, -2, 5, -1, -2, 10];
+        let solution = vec![
+            Log::new(
+                3,
+                Decision::InsertIn { batch_index: 0, job_code: 8 },
+            ),
+            Log::new(
+                -19,
+                Decision::InsertIn { batch_index: 1, job_code: 6 },
+            ),
+            Log::new(
+                -2,
+                Decision::InsertIn { batch_index: 2, job_code: 6 },
+            ),
+            Log::new(
+                5,
+                Decision::CreateEnd { job_code: 10 },
+            ),
+            Log::new(
+                -1,
+                Decision::InsertIn { batch_index: 1, job_code: 8 },
+            ),
+            Log::new(
+                -2,
+                Decision::InsertIn { batch_index: 2, job_code: 8 },
+            ),
+            Log::new(
+                10,
+                Decision::CreateEnd { job_code: 10 },
+            ),
+        ];
 
         assert_eq!(set_m, solution);
     }
@@ -75,7 +116,28 @@ mod test {
         schedule.insert_end(batch2);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        let solution = vec![-2, -1, 6, -6, 11];
+        let solution = vec![
+            Log::new(
+                -2,
+                Decision::InsertIn { batch_index: 0, job_code: 7 },
+            ),
+            Log::new(
+                -1,
+                Decision::InsertIn { batch_index: 1, job_code: 6 },
+            ),
+            Log::new(
+                6,
+                Decision::CreateEnd { job_code: 10 },
+            ),
+            Log::new(
+                -6,
+                Decision::InsertIn { batch_index: 1, job_code: 7 },
+            ),
+            Log::new(
+                11,
+                Decision::CreateEnd { job_code: 10 },
+            ),
+        ];
 
         assert_eq!(set_m, solution);
     }
@@ -110,7 +172,44 @@ mod test {
         schedule.insert_end(batch4);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        let solution = vec![2, -36, -18, -7, 0, -1, 1, -6, 6];
+        let solution = vec![
+            Log::new(
+                2,
+                Decision::InsertIn { batch_index: 0, job_code: 4 },
+            ),
+            Log::new(
+                -36,
+                Decision::InsertIn { batch_index: 1, job_code: 6 },
+            ),
+            Log::new(
+                -18,
+                Decision::InsertIn { batch_index: 2, job_code: 6 },
+            ),
+            Log::new(
+                -7,
+                Decision::InsertIn { batch_index: 3, job_code: 6 },
+            ),
+            Log::new(
+                0,
+                Decision::CreateEnd { job_code: 10 },
+            ),
+            Log::new(
+                -1,
+                Decision::InsertIn { batch_index: 1, job_code: 4 },
+            ),
+            Log::new(
+                1,
+                Decision::InsertIn { batch_index: 2, job_code: 4 },
+            ),
+            Log::new(
+                -6,
+                Decision::InsertIn { batch_index: 3, job_code: 4 },
+            ),
+            Log::new(
+                6,
+                Decision::CreateEnd { job_code: 10 },
+            ),
+        ];
 
         assert_eq!(set_m, solution);
     }
