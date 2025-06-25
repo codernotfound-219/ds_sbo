@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test {
     use ds_sbo_rust::core::{BatchSchedule, Batch};
-    use ds_sbo_rust::greedy_dp::deviation_calculator::{create_in, create_end, insert_in};
+    use ds_sbo_rust::greedy_dp::deviation_calculator::{create_in, create_end};
     use ds_sbo_rust::resources::problem1::*;
 
     #[test]
@@ -81,36 +81,4 @@ mod test {
         assert_eq!(deviation_j2, -1, "failed deviation_j2");
     }
 
-
-    #[test]
-    fn inserting_job4() {
-        let job1 = job1();
-        let job5 = job5();
-        let job6 = job6();
-        let job7 = job7();
-        let job8 = job8();
-        let job10 = job10();
-        let tester = job4();
-
-        let mut batch1 = Batch::new(1);
-        let mut batch2 = Batch::new(2);
-        let mut batch3 = Batch::new(3);
-        let mut batch4 = Batch::new(4);
-
-        batch1.insert(job5);
-        batch1.insert(job6);
-        batch2.insert(job7);
-        batch3.insert(job8);
-        batch4.insert(job1);
-        batch4.insert(job10);
-
-        let mut schedule = BatchSchedule::new();
-        schedule.insert_end(batch1);
-        schedule.insert_end(batch2);
-        schedule.insert_end(batch3);
-        schedule.insert_end(batch4);
-
-        let deviation = insert_in(0, &schedule, &tester, 0, 0);
-        assert_eq!(deviation, -36, "failed to insert job4 at pos 0");
-    }
 }

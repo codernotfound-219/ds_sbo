@@ -1,0 +1,117 @@
+#[cfg(test)]
+mod test {
+    use ds_sbo_rust::core::{Batch, BatchSchedule};
+    use ds_sbo_rust::greedy_dp::deviation_calculator::insert_in;
+    use ds_sbo_rust::resources::problem1::*;
+
+    #[test]
+    fn insert_job5() {
+        let job1 = job1();
+        let job6 = job6();
+
+        let tester = job5();
+
+        let mut batch1 = Batch::new(1);
+        batch1.insert(job1);
+        batch1.insert(job6);
+
+        let mut schedule = BatchSchedule::new();
+        schedule.insert_end(batch1);
+
+        let set_m = insert_in(0, &schedule, &tester, 0);
+        assert_eq!(set_m, vec![8, 6]);
+    }
+
+    #[test]
+    fn insert_job8() {
+        let job1 = job1();
+        let job5 = job5();
+        let job6 = job6();
+        let job10 = job10();
+        let job7 = job7();
+        let tester = job8();
+
+        let mut batch1 = Batch::new(1);
+        let mut batch2 = Batch::new(2);
+        let mut batch3 = Batch::new(3);
+
+        batch1.insert(job5);
+        batch1.insert(job6);
+        batch2.insert(job7);
+        batch3.insert(job1);
+        batch3.insert(job10);
+
+        let mut schedule = BatchSchedule::new();
+
+        schedule.insert_end(batch1);
+        schedule.insert_end(batch2);
+        schedule.insert_end(batch3);
+
+        let set_m = insert_in(0, &schedule, &tester, 0);
+        let solution = vec![3, -19, -2, 5, -1, -2, 10];
+
+        assert_eq!(set_m, solution);
+    }
+
+    #[test]
+    fn insert_job7() {
+        let job1 = job1();
+        let job5 = job5();
+        let job6 = job6();
+        let job10 = job10();
+        let tester = job7();
+
+        let mut batch1 = Batch::new(1);
+        let mut batch2 = Batch::new(2);
+        
+        batch1.insert(job5);
+        batch1.insert(job6);
+        batch2.insert(job1);
+        batch2.insert(job10);
+
+        let mut schedule = BatchSchedule::new();
+
+        schedule.insert_end(batch1);
+        schedule.insert_end(batch2);
+
+        let set_m = insert_in(0, &schedule, &tester, 0);
+        let solution = vec![-2, -1, 6, -6, 11];
+
+        assert_eq!(set_m, solution);
+    }
+
+    #[test]
+    fn insert_job4() {
+        let job1 = job1();
+        let job5 = job5();
+        let job6 = job6();
+        let job10 = job10();
+        let job7 = job7();
+        let job8 = job8();
+        let tester = job4();
+
+        let mut batch1 = Batch::new(1);
+        let mut batch2 = Batch::new(2);
+        let mut batch3 = Batch::new(3);
+        let mut batch4 = Batch::new(4);
+
+        batch1.insert(job5);
+        batch1.insert(job6);
+        batch2.insert(job7);
+        batch3.insert(job8);
+        batch4.insert(job1);
+        batch4.insert(job10);
+
+        let mut schedule = BatchSchedule::new();
+
+        schedule.insert_end(batch1);
+        schedule.insert_end(batch2);
+        schedule.insert_end(batch3);
+        schedule.insert_end(batch4);
+
+        let set_m = insert_in(0, &schedule, &tester, 0);
+        let solution = vec![2, -36, -18, -7, 0, -1, 1, -6, 6];
+
+        assert_eq!(set_m, solution);
+    }
+}
