@@ -3,4 +3,4 @@ pub mod structures;
 pub mod deviation_calculator;
 
 pub use structures::Decision;
-pub use structures::Log;
+pub use structures::ActiveLog;
