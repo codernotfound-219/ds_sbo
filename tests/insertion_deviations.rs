@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod test {
-    use ds_sbo_rust::greedy_dp::deviation_calculator::insertion::insert_in;
+    use ds_sbo_rust::greedy_dp::get_insertion_deviations;
 use ds_sbo_rust::core::{Batch, BatchSchedule};
     use ds_sbo_rust::greedy_dp::structures::LogHistory;
     use ds_sbo_rust::greedy_dp::Decision;
@@ -20,7 +20,7 @@ use ds_sbo_rust::core::{Batch, BatchSchedule};
         let mut schedule = BatchSchedule::new();
         schedule.insert_end(batch1);
 
-        let set_m = insert_in(&schedule, &tester);
+        let set_m = get_insertion_deviations(&schedule, &tester);
         let solution: Vec<LogHistory> = vec![LogHistory::new(
             6,
             vec![
@@ -59,7 +59,7 @@ use ds_sbo_rust::core::{Batch, BatchSchedule};
         schedule.insert_end(batch2);
         schedule.insert_end(batch3);
 
-        let set_m = insert_in(&schedule, &tester);
+        let set_m = get_insertion_deviations(&schedule, &tester);
         let solution: Vec<LogHistory> = vec![
             LogHistory::new(
                 -2,
@@ -118,7 +118,7 @@ use ds_sbo_rust::core::{Batch, BatchSchedule};
         schedule.insert_end(batch1);
         schedule.insert_end(batch2);
 
-        let set_m = insert_in(&schedule, &tester);
+        let set_m = get_insertion_deviations(&schedule, &tester);
         let solution: Vec<LogHistory> = vec![
             LogHistory::new(
                 -3,
@@ -177,7 +177,7 @@ use ds_sbo_rust::core::{Batch, BatchSchedule};
         schedule.insert_end(batch3);
         schedule.insert_end(batch4);
 
-        let set_m = insert_in(&schedule, &tester);
+        let set_m = get_insertion_deviations(&schedule, &tester);
         let solution: Vec<LogHistory> = vec![
             LogHistory::new(
                 -7,
@@ -258,7 +258,7 @@ use ds_sbo_rust::core::{Batch, BatchSchedule};
         schedule.insert_end(batch4);
         schedule.insert_end(batch5);
 
-        let set_m = insert_in(&schedule, &tester);
+        let set_m = get_insertion_deviations(&schedule, &tester);
         let solution: Vec<LogHistory> = vec![
             LogHistory {
                 deviation: -2147483648,

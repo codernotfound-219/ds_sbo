@@ -31,8 +31,8 @@ Handles cascading effects when batch completion times change.
 Main insertion logic with clean separation of concerns.
 
 - **`core.rs`**: Main insertion interface and orchestration
-  - `insert_in()`: Public API for job insertion
-  - `insert_in_helper()`: Core insertion logic
+  - `get_insertion_deviations()`: Public API to get deviation for job insertions
+  - `insertion_helper()`: Core insertion logic for calculating deviations
 
 - **`displacement.rs`**: Displacement handling logic
   - `handle_displacement_due_to_cur_job()`: Main displacement processing
@@ -48,6 +48,9 @@ Main insertion logic with clean separation of concerns.
 #### `creation/`
 Handles creation of new batches.
 
-- **`creation.rs`**: Batch creation logic
+- **`core.rs`**: Main creation interface
+  - `get_creation_deviations()`: Public API to get deviation for job creations
+
+- **`calculations.rs`**: Deviation for Batch creation logic
   - `create_in()`: Create batch at specific position
   - `create_end()`: Create batch at the end

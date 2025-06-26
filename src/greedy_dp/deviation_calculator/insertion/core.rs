@@ -9,15 +9,15 @@ use crate::{
 };
 
 // NOTE: Main public interface for job insertion
-pub fn insert_in(
+pub fn get_insertion_deviations(
     schedule: &BatchSchedule,
     job: &Job,
 ) -> Vec<LogHistory> {
-    insert_in_helper(0, schedule, job, 0, None)
+    insertion_helper(0, schedule, job, 0, None)
 }
 
 // NOTE: Helper function that handles the core insertion logic
-pub(crate) fn insert_in_helper(
+pub(crate) fn insertion_helper(
     batch_index: usize,
     schedule: &BatchSchedule,
     job: &Job,

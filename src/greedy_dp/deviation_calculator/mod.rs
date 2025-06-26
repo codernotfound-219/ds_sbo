@@ -3,5 +3,5 @@ pub mod batch_effects;
 pub mod creation;
 pub mod insertion;
 
-pub use insertion::insert_in;
+pub use insertion::get_insertion_deviations;
 pub use creation::get_creation_deviations;
