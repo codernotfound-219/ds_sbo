@@ -1,8 +1,9 @@
 #[cfg(test)]
 mod test {
-    use ds_sbo_rust::core::{Batch, BatchSchedule};
+    use ds_sbo_rust::greedy_dp::deviation_calculator::insertion::insert_in;
+use ds_sbo_rust::core::{Batch, BatchSchedule};
     use ds_sbo_rust::greedy_dp::structures::LogHistory;
-    use ds_sbo_rust::greedy_dp::{deviation_calculator::insert_in, Decision};
+    use ds_sbo_rust::greedy_dp::Decision;
     use ds_sbo_rust::resources::problem1::*;
 
     #[test]
