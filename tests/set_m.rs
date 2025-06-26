@@ -61,46 +61,6 @@ mod test {
         schedule.insert_end(batch3);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        // let solution = vec![
-        //     ActiveLog::new(
-        //         3,
-        //         Decision::InsertIn {
-        //             batch_index: 0,
-        //             job_code: 8,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         -19,
-        //         Decision::InsertIn {
-        //             batch_index: 1,
-        //             job_code: 6,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         -2,
-        //         Decision::InsertIn {
-        //             batch_index: 2,
-        //             job_code: 6,
-        //         },
-        //     ),
-        //     ActiveLog::new(5, Decision::CreateEnd { job_code: 10 }),
-        //     ActiveLog::new(
-        //         -1,
-        //         Decision::InsertIn {
-        //             batch_index: 1,
-        //             job_code: 8,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         -2,
-        //         Decision::InsertIn {
-        //             batch_index: 2,
-        //             job_code: 8,
-        //         },
-        //     ),
-        //     ActiveLog::new(10, Decision::CreateEnd { job_code: 10 }),
-        // ];
-        println!("{:#?}", set_m);
         let solution: Vec<LogHistory> = vec![LogHistory::new(
             -2,
             vec![
@@ -163,31 +123,6 @@ mod test {
         schedule.insert_end(batch2);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        // let solution = vec![
-        //     ActiveLog::new(
-        //         -2,
-        //         Decision::InsertIn {
-        //             batch_index: 0,
-        //             job_code: 7,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         -1,
-        //         Decision::InsertIn {
-        //             batch_index: 1,
-        //             job_code: 6,
-        //         },
-        //     ),
-        //     ActiveLog::new(6, Decision::CreateEnd { job_code: 10 }),
-        //     ActiveLog::new(
-        //         -6,
-        //         Decision::InsertIn {
-        //             batch_index: 1,
-        //             job_code: 7,
-        //         },
-        //     ),
-        //     ActiveLog::new(11, Decision::CreateEnd { job_code: 10 }),
-        // ];
         let solution: Vec<LogHistory> = vec![LogHistory::new(
             -3,
             vec![
@@ -244,61 +179,6 @@ mod test {
         schedule.insert_end(batch4);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        println!("{:#?}", set_m);
-        // let solution = vec![
-        //     ActiveLog::new(
-        //         2,
-        //         Decision::InsertIn {
-        //             batch_index: 0,
-        //             job_code: 4,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         -36,
-        //         Decision::InsertIn {
-        //             batch_index: 1,
-        //             job_code: 6,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         -18,
-        //         Decision::InsertIn {
-        //             batch_index: 2,
-        //             job_code: 6,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         -7,
-        //         Decision::InsertIn {
-        //             batch_index: 3,
-        //             job_code: 6,
-        //         },
-        //     ),
-        //     ActiveLog::new(0, Decision::CreateEnd { job_code: 10 }),
-        //     ActiveLog::new(
-        //         -1,
-        //         Decision::InsertIn {
-        //             batch_index: 1,
-        //             job_code: 4,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         1,
-        //         Decision::InsertIn {
-        //             batch_index: 2,
-        //             job_code: 4,
-        //         },
-        //     ),
-        //     ActiveLog::new(
-        //         -6,
-        //         Decision::InsertIn {
-        //             batch_index: 3,
-        //             job_code: 4,
-        //         },
-        //     ),
-        //     ActiveLog::new(6, Decision::CreateEnd { job_code: 10 }),
-        // ];
-
         let solution: Vec<LogHistory> = vec![LogHistory::new(
             -7,
             vec![
