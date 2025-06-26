@@ -1,5 +1,5 @@
 use super::super::common::CompletionUpdate;
-use crate::core::BatchSchedule;
+use crate::structures::BatchSchedule;
 
 // NOTE: Calculate cascading completion times occuring due to virtual insertion of displaced jobs
 pub fn calculate_cascading_completion(

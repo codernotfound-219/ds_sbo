@@ -1,4 +1,4 @@
-use crate::core::batch::Batch;
+use crate::structures::batch::Batch;
 use std::fmt;
 
 #[derive(Debug, PartialEq)]

@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test {
     use ds_sbo_rust::greedy_dp::get_insertion_deviations;
-use ds_sbo_rust::core::{Batch, BatchSchedule};
+    use ds_sbo_rust::structures::{Batch, BatchSchedule};
     use ds_sbo_rust::greedy_dp::structures::LogHistory;
     use ds_sbo_rust::greedy_dp::Decision;
     use ds_sbo_rust::resources::problem1::*;

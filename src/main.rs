@@ -1,4 +1,4 @@
-use ds_sbo_rust::core::Job;
+use ds_sbo_rust::structures::Job;
 
 fn main() {
     let job1 = Job::new(1, 1, 29, 9, 9);

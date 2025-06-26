@@ -1,4 +1,4 @@
-use crate::core::{BatchSchedule, Job};
+use crate::structures::{BatchSchedule, Job};
 use super::super::common::calculate_deviation;
 
 // NOTE:

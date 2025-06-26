@@ -1,4 +1,4 @@
-use crate::core::job::Job;
+use crate::structures::job::Job;
 use std::fmt;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -37,13 +37,6 @@ impl Batch {
         out
     }
 
-    // BUG:
-    // The release date is updated to the highest release date amongst the jobs.
-    // You must also consider the previous batch's completion time.
-
-    // NOTE: doesnt make sense:
-    // the output, run through the solver shows release as 14
-    // the schedule, manually built, shows release as 15
     fn update_batch_param(&mut self) {
         let (release_date, processing_time, min_due_time, size) = self.jobs.iter().fold(
             (

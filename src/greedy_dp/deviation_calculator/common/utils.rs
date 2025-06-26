@@ -1,4 +1,4 @@
-use crate::core::{Batch, Job, BatchSchedule};
+use crate::structures::{Batch, Job, BatchSchedule};
 use crate::resources::BATCH_CAPACITY;
 use super::types::InsertionResult;
 

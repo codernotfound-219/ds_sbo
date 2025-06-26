@@ -1,4 +1,4 @@
-use crate::core::Job;
+use crate::structures::Job;
 
 pub fn job1() -> Job {
     Job::new(1, 5, 28, 8, 8)

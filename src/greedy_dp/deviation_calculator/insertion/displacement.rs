@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-use crate::core::{BatchSchedule, Job};
+use crate::structures::{BatchSchedule, Job};
 use crate::greedy_dp::{LogHistory, ActiveLog, Decision};
 use crate::greedy_dp::deviation_calculator::common::{CompletionUpdate, decisions, compute_current_deviation};
 use super::possibilities::{get_active_logs_for_lp_job, find_best_possibility};

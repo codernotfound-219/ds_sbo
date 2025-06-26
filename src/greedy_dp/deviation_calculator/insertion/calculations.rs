@@ -1,4 +1,4 @@
-use crate::core::{BatchSchedule, Job};
+use crate::structures::{BatchSchedule, Job};
 use crate::greedy_dp::deviation_calculator::common::calculate_deviation;
 
 // NOTE: this function returns the aggregated deviation due to insertion when size_check passes

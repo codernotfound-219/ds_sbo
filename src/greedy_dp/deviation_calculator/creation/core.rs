@@ -1,6 +1,6 @@
 use super::calculations::{create_end, create_in};
 use crate::{
-    core::{BatchSchedule, Job},
+    structures::{BatchSchedule, Job},
     greedy_dp::{deviation_calculator::common::decisions, LogHistory},
 };
 

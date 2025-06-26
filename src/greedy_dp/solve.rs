@@ -1,4 +1,4 @@
-use crate::core::{Batch, BatchSchedule, Job};
+use crate::structures::{Batch, BatchSchedule, Job};
 
 pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     if list.is_empty() {

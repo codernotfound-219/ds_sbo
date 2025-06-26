@@ -4,7 +4,7 @@ use crate::greedy_dp::deviation_calculator::{
     common::{decisions, CompletionUpdate},
 };
 use crate::{
-    core::{BatchSchedule, Job},
+    structures::{BatchSchedule, Job},
     greedy_dp::LogHistory,
 };
 

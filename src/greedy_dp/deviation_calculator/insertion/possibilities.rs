@@ -2,7 +2,7 @@ use super::{
     calculations::calculate_deviation_for_direct_insertion,
     displacement::handle_displacement_due_to_lp_job,
 };
-use crate::core::{BatchSchedule, Job};
+use crate::structures::{BatchSchedule, Job};
 use crate::greedy_dp::deviation_calculator::{
     batch_effects::{calculate_cascading_completion, calculate_last_batch_completion},
     common::{decisions, size_check, CompletionUpdate, PossibilitySet},
