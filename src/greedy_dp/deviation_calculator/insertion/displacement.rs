@@ -2,16 +2,16 @@ use std::cmp::Ordering;
 
 use crate::core::{BatchSchedule, Job};
 use crate::greedy_dp::{LogHistory, ActiveLog, Decision};
-use super::utils::{process_active_log, compute_current_deviation, find_best_possibility};
-use super::helpers::get_all_possible_active_logs_for_displaced_job;
+use crate::greedy_dp::deviation_calculator::common::{CompletionUpdate, decisions, compute_current_deviation};
+use super::possibilities::{get_active_logs_for_lp_job, find_best_possibility};
 
-// Helper function to handle displacement in main insertion logic
-pub fn handle_main_displacement(
+// NOTE: Handles displacement caused due to insertion of current job
+pub fn handle_displacement_due_to_cur_job(
     job: &Job,
     batch_index: usize,
     schedule: &BatchSchedule,
     current_prev_completion: u32,
-    _updated_completion_at_index: Option<(usize, u32)>,
+    _completion_update: CompletionUpdate,
 ) -> LogHistory {
     let mut job_list: Vec<Job> = schedule.batches[batch_index].jobs.clone();
     let lp_job = job_list.pop().expect("Batch should not be empty");
@@ -22,44 +22,40 @@ pub fn handle_main_displacement(
         }
         Ordering::Greater => {
             // Calculate deviation for inserting job in current batch (after removing lp_job)
-            let (current_deviation_raw, completion) =
-                compute_current_deviation(&job_list, job, current_prev_completion);
+            let insertion_result = compute_current_deviation(&job_list, job, current_prev_completion);
             
             // Get ALL possible placements for the displaced job
-            let all_recursive_possibilities = get_all_possible_active_logs_for_displaced_job(
+            let recursive_possibilities = get_active_logs_for_lp_job(
                 batch_index + 1,
                 schedule,
                 &lp_job,
-                completion,
-                Some((batch_index, completion)),
+                insertion_result.completion,
+                Some((batch_index, insertion_result.completion)),
             );
             
             // Find the best possibility
-            let (_best_deviation, best_logs) = find_best_possibility(all_recursive_possibilities);
+            let (_best_deviation, best_logs) = find_best_possibility(recursive_possibilities);
             
             // Combine current insertion with the best recursive possibility
             let mut final_logs = vec![ActiveLog::new(
-                current_deviation_raw,
-                Decision::InsertIn {
-                    batch_index,
-                    job_code: job.code,
-                },
+                insertion_result.deviation,
+                decisions::insert_at(batch_index, job.code),
             )];
             final_logs.extend(best_logs);
             
             // Process into LogHistory
-            process_active_log(final_logs)
+            process_active_logs(final_logs)
         }
     }
 }
 
-// Helper function to handle displacement scenario
-pub fn handle_displacement_scenario(
+// NOTE: Handles displacement scenario for when lp_job displaces other jobs
+pub fn handle_displacement_due_to_lp_job(
     job: &Job,
     batch_index: usize,
     schedule: &BatchSchedule,
     prev_completion: u32,
-    _updated_completion_at_index: Option<(usize, u32)>,
+    _completion_update: CompletionUpdate,
 ) -> Vec<Vec<ActiveLog>> {
     let mut job_list: Vec<Job> = schedule.batches[batch_index].jobs.clone();
     let lp_job = job_list.pop().expect("Batch should not be empty");
@@ -71,27 +67,23 @@ pub fn handle_displacement_scenario(
         }
         Ordering::Greater => {
             // Can displace - calculate deviation for current insertion
-            let (current_deviation, completion) =
-                compute_current_deviation(&job_list, job, prev_completion);
+            let insertion_result = compute_current_deviation(&job_list, job, prev_completion);
             
             // Get all possibilities for the displaced job
-            let recursive_possibilities = get_all_possible_active_logs_for_displaced_job(
+            let recursive_possibilities = get_active_logs_for_lp_job(
                 batch_index + 1,
                 schedule,
                 &lp_job,
-                completion,
-                Some((batch_index, completion)),
+                insertion_result.completion,
+                Some((batch_index, insertion_result.completion)),
             );
             
             // Combine current insertion with each recursive possibility
             let mut combined_possibilities = Vec::new();
             for recursive_logs in recursive_possibilities {
                 let mut combined_logs = vec![ActiveLog::new(
-                    current_deviation,
-                    Decision::InsertIn {
-                        batch_index,
-                        job_code: job.code,
-                    },
+                    insertion_result.deviation,
+                    decisions::insert_at(batch_index, job.code),
                 )];
                 combined_logs.extend(recursive_logs);
                 combined_possibilities.push(combined_logs);
@@ -102,3 +94,28 @@ pub fn handle_displacement_scenario(
     }
 }
 
+// NOTE: Process a vector of ActiveLogs into a single LogHistory
+fn process_active_logs(logs: Vec<ActiveLog>) -> LogHistory {
+    let invalid_logs: Vec<&ActiveLog> = logs.iter().filter(|log| log.deviation == i32::MIN).collect();
+    if !invalid_logs.is_empty() {
+        return LogHistory::new(i32::MIN, vec![Decision::NotPossible]);
+    }
+
+    let aggregate: i32 = logs.iter()
+        .filter(|log| log.deviation < 0)
+        .map(|log| log.deviation)
+        .sum();
+    let min_deviation = logs.iter()
+        .map(|log| log.deviation)
+        .min()
+        .unwrap_or(0);
+
+    let actions: Vec<Decision> = logs.iter()
+        .map(|log| log.action)
+        .collect();
+
+    LogHistory::new(
+        if aggregate != 0 { aggregate } else { min_deviation }, 
+        actions
+    )
+}
