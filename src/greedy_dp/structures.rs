@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Decision {
     InsertIn { batch_index: usize, job_code: u32 },
@@ -37,18 +35,3 @@ impl LogHistory {
         }
     }
 }
-
-// impl Display for LogHistory {
-//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-//         writeln!(f, "Deviation: {}", self.deviation)?;
-//         writeln!(f, "Actions: [")?;
-//         for (i, action) in self.actions.iter().enumerate() {
-//             writeln!(f, "{:?}", action)?;
-//             if i < self.actions.len() - 1 {
-//                 write!(f, ", ")?;
-//             }
-//         }
-//         writeln!(f, "]")?;
-//         Ok(())
-//     }
-// }
