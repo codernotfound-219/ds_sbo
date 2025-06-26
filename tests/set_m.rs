@@ -20,18 +20,16 @@ mod test {
         schedule.insert_end(batch1);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        let solution: Vec<LogHistory> = vec![
-            LogHistory::new(
-                6,
-                vec![
-                    Decision::InsertIn {
-                        batch_index: 0,
-                        job_code: 5,
-                    },
-                    Decision::CreateEnd { job_code: 1 },
-                ]
-            )
-        ];
+        let solution: Vec<LogHistory> = vec![LogHistory::new(
+            6,
+            vec![
+                Decision::InsertIn {
+                    batch_index: 0,
+                    job_code: 5,
+                },
+                Decision::CreateEnd { job_code: 1 },
+            ],
+        )];
         assert_eq!(set_m, solution);
     }
 
@@ -61,39 +59,36 @@ mod test {
         schedule.insert_end(batch3);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        let solution: Vec<LogHistory> = vec![LogHistory::new(
-            -2,
-            vec![
-                Decision::InsertIn {
-                    batch_index: 0,
-                    job_code: 8,
-                },
-                Decision::InsertIn {
-                    batch_index: 2,
-                    job_code: 6,
-                },
-                Decision::CreateEnd {
-                    job_code: 10
-                }
-            ],
-        ), LogHistory::new(
-                -1,
+        let solution: Vec<LogHistory> = vec![
+            LogHistory::new(
+                -2,
                 vec![
                     Decision::InsertIn {
-                        batch_index: 1,
+                        batch_index: 0,
                         job_code: 8,
                     },
+                    Decision::InsertIn {
+                        batch_index: 2,
+                        job_code: 6,
+                    },
+                    Decision::CreateEnd { job_code: 10 },
                 ],
-        ), LogHistory::new(
+            ),
+            LogHistory::new(
+                -1,
+                vec![Decision::InsertIn {
+                    batch_index: 1,
+                    job_code: 8,
+                }],
+            ),
+            LogHistory::new(
                 -2,
                 vec![
                     Decision::InsertIn {
                         batch_index: 2,
                         job_code: 8,
                     },
-                    Decision::CreateEnd {
-                        job_code: 10,
-                    },
+                    Decision::CreateEnd { job_code: 10 },
                 ],
             ),
         ];
@@ -123,29 +118,32 @@ mod test {
         schedule.insert_end(batch2);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        let solution: Vec<LogHistory> = vec![LogHistory::new(
-            -3,
-            vec![
-                Decision::InsertIn {
-                    batch_index: 0,
-                    job_code: 7,
-                },
-                Decision::InsertIn {
-                    batch_index: 1,
-                    job_code: 6,
-                },
-                Decision::CreateEnd { job_code: 10 },
-            ],
-        ), LogHistory::new(
-            -6,
-            vec![
-                Decision::InsertIn {
-                    batch_index: 1,
-                    job_code: 7,
-                },
-                Decision::CreateEnd { job_code: 10 },
-            ],
-        )];
+        let solution: Vec<LogHistory> = vec![
+            LogHistory::new(
+                -3,
+                vec![
+                    Decision::InsertIn {
+                        batch_index: 0,
+                        job_code: 7,
+                    },
+                    Decision::InsertIn {
+                        batch_index: 1,
+                        job_code: 6,
+                    },
+                    Decision::CreateEnd { job_code: 10 },
+                ],
+            ),
+            LogHistory::new(
+                -6,
+                vec![
+                    Decision::InsertIn {
+                        batch_index: 1,
+                        job_code: 7,
+                    },
+                    Decision::CreateEnd { job_code: 10 },
+                ],
+            ),
+        ];
         assert_eq!(set_m, solution);
     }
 
@@ -179,32 +177,45 @@ mod test {
         schedule.insert_end(batch4);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        let solution: Vec<LogHistory> = vec![LogHistory::new(
-            -7,
-            vec![
-                Decision::InsertIn {
-                    batch_index: 0,
-                    job_code: 4,
-                },
-                Decision::InsertIn { batch_index: 3, job_code: 6 },
-                Decision::CreateEnd { job_code: 10},
-            ]), 
+        let solution: Vec<LogHistory> = vec![
+            LogHistory::new(
+                -7,
+                vec![
+                    Decision::InsertIn {
+                        batch_index: 0,
+                        job_code: 4,
+                    },
+                    Decision::InsertIn {
+                        batch_index: 3,
+                        job_code: 6,
+                    },
+                    Decision::CreateEnd { job_code: 10 },
+                ],
+            ),
             LogHistory::new(
                 -1,
-                vec![
-                    Decision::InsertIn { batch_index: 1, job_code: 4 },
-            ]),
+                vec![Decision::InsertIn {
+                    batch_index: 1,
+                    job_code: 4,
+                }],
+            ),
             LogHistory::new(
                 1,
-                vec![
-                    Decision::InsertIn { batch_index: 2, job_code: 4 },
-            ]),
+                vec![Decision::InsertIn {
+                    batch_index: 2,
+                    job_code: 4,
+                }],
+            ),
             LogHistory::new(
                 -6,
                 vec![
-                    Decision::InsertIn { batch_index: 3, job_code: 4 },
+                    Decision::InsertIn {
+                        batch_index: 3,
+                        job_code: 4,
+                    },
                     Decision::CreateEnd { job_code: 10 },
-            ]),
+                ],
+            ),
         ];
         assert_eq!(set_m, solution);
     }
@@ -247,43 +258,32 @@ mod test {
         schedule.insert_end(batch5);
 
         let set_m = insert_in(0, &schedule, &tester, 0);
-        let solution: Vec<LogHistory> = vec!
-[
-    LogHistory {
-        deviation: -2147483648,
-        actions: vec![
-            Decision::NotPossible,
-        ],
-    },
-    LogHistory {
-        deviation: -36,
-        actions: vec![
-            Decision::InsertIn {
-                batch_index: 1,
-                job_code: 3,
+        let solution: Vec<LogHistory> = vec![
+            LogHistory {
+                deviation: -2147483648,
+                actions: vec![Decision::NotPossible],
             },
-        ],
-    },
-    LogHistory {
-        deviation: -2147483648,
-        actions: vec![
-            Decision::NotPossible,
-        ],
-    },
-    LogHistory {
-        deviation: -2147483648,
-        actions: vec![
-            Decision::NotPossible,
-        ],
-    },
-    LogHistory {
-        deviation: -2147483648,
-        actions: vec![
-            Decision::NotPossible,
-        ],
-    },
-];
+            LogHistory {
+                deviation: -36,
+                actions: vec![Decision::InsertIn {
+                    batch_index: 1,
+                    job_code: 3,
+                }],
+            },
+            LogHistory {
+                deviation: -2147483648,
+                actions: vec![Decision::NotPossible],
+            },
+            LogHistory {
+                deviation: -2147483648,
+                actions: vec![Decision::NotPossible],
+            },
+            LogHistory {
+                deviation: -2147483648,
+                actions: vec![Decision::NotPossible],
+            },
+        ];
 
-            assert_eq!(set_m, solution);
+        assert_eq!(set_m, solution);
     }
 }
