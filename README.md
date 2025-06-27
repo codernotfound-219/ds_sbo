@@ -13,7 +13,7 @@ ds_sbo_rust/
 │   ├── main.rs         ← example binary: prints job list
 │   ├── lib.rs          ← library entry point
 │   ├── core/           ← scheduling model (Job, Batch, BatchSchedule, handlers)
-│   ├── greedy_dp/     ← cost-driven batching (helper, cost_calculator, solve)
+│   ├── greedy_dp/      ← cost-driven batching (helper, cost_calculator, solve)
 │   └── resources/      ← job definitions for problem instances
 └── tests/              ← unit tests for each decision and cost function
 ```
