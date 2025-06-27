@@ -13,3 +13,4 @@ pub use deviation_calculator::get_insertion_deviations;
 
 // BUG: FOR TESTING ONLY - REMOVE LATER
 pub use helper::get_action;
+pub use execute::execute_action;

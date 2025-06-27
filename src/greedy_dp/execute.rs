@@ -1,32 +1,58 @@
-use crate::structures::{Batch, Job, BatchSchedule};
-use super::Decision;
+use super::{Decision, LogHistory};
+use crate::structures::{Batch, BatchSchedule, Job};
 
-pub fn execute_actions(actions: Vec<Decision>, schedule: &mut BatchSchedule, job: Job) {
-    match actions[0] { 
-        Decision::InsertIn { batch_index, job_code } => {
-            if job_code != job.code { panic!("Incorrect job code detected during execution"); }
-            schedule.batches[batch_index].insert(job);
-            schedule.update_parameters(batch_index);
-        },
-        Decision::CreateAt { batch_index, job_code } => {
-            if job_code != job.code { panic!("Incorrect job code detected during execution"); }
-            let mut batch = Batch::new(batch_index+1);
-            batch.insert(job);
-            schedule.insert_at_position(batch_index, batch);
-        },
-        Decision::CreateEnd { job_code } => {
-            if job_code != job.code { panic!("Incorrect job code detected during execution"); }
-            let mut batch = Batch::new(schedule.batches.len()+1);
-            batch.insert(job);
-            schedule.insert_end(batch);
-        },
-        Decision::NotPossible => { panic!("i32::MIN was sent in as deviation for execution"); },
+pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job: Job) {
+    if loghistory.actions.is_empty() {
+        panic!("No actions provided");
     }
 
-    // for action in 1..actions.len() {
-    //
-    // }
+    let mut current_job = job;
+    let mut prev_batch_index = schedule.batches.len().saturating_sub(1);
+
+    for (i, action) in loghistory.actions.iter().enumerate() {
+        if i > 0 {
+            current_job = pop_job_from_batch(schedule, prev_batch_index);
+        }
+
+        match action {
+            Decision::InsertIn { batch_index, job_code } => {
+                validate_job_code(*job_code, &current_job);
+
+                prev_batch_index = *batch_index;
+                schedule.batches[*batch_index].insert(current_job);
+                schedule.update_parameters(*batch_index);
+            }
+            Decision::CreateAt { batch_index, job_code } => {
+                validate_job_code(*job_code, &current_job);
+
+                let mut batch = Batch::new(batch_index + 1);
+                batch.insert(current_job);
+                schedule.insert_at_position(*batch_index, batch);
+                return; // Early return as specified in original logic
+            }
+            Decision::CreateEnd { job_code } => {
+                validate_job_code(*job_code, &current_job);
+                
+                let mut batch = Batch::new(schedule.batches.len() + 1);
+                batch.insert(current_job);
+                schedule.insert_end(batch);
+                return; // Early return as specified in original logic
+            }
+            Decision::NotPossible => {
+                panic!("NotPossible decision should not be executed");
+            }
+        }
+    }
 }
 
-// TODO:
-// how do you find the location to which popped job is from?
+fn validate_job_code(expected_code: u32, job: &Job) {
+    if expected_code != job.code {
+        panic!("Job code mismatch: expected {}, got {}", expected_code, job.code);
+    }
+}
+
+fn pop_job_from_batch(schedule: &mut BatchSchedule, batch_index: usize) -> Job {
+    schedule.batches[batch_index]
+        .pop_job()
+        .expect("Could not pop job from batch")
+}

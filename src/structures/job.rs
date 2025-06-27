@@ -2,7 +2,7 @@ use std::fmt;
 use std::cmp::Reverse;
 use std::cmp::Ordering;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Job {
     pub code: u32,
     pub release_date: u32,
