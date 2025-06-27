@@ -28,7 +28,7 @@ pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job
                 let mut batch = Batch::new(batch_index + 1);
                 batch.insert(current_job);
                 schedule.insert_at_position(*batch_index, batch);
-                return; // Early return as specified in original logic
+                return;
             }
             Decision::CreateEnd { job_code } => {
                 validate_job_code(*job_code, &current_job);
@@ -36,7 +36,7 @@ pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job
                 let mut batch = Batch::new(schedule.batches.len() + 1);
                 batch.insert(current_job);
                 schedule.insert_end(batch);
-                return; // Early return as specified in original logic
+                return;
             }
             Decision::NotPossible => {
                 panic!("NotPossible decision should not be executed");
