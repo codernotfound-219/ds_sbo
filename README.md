@@ -27,7 +27,7 @@ Defines the basic data structures:
 - `BatchSchedule` – sequence of batches with rolling completion times  
 
 ### greedy_dp  
-A cost-based approach:
+A deviation-based approach:
 - `deviation_calculator/` – finds deviation for all possible cases of insertion / creation
 - `execute` – executes the action corresponding to maximum deviation
 - `solve` – (stub) orchestrates repeated decisions across the schedule  
