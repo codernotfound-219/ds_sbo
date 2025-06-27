@@ -20,7 +20,6 @@ pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job
 
                 prev_batch_index = *batch_index;
                 schedule.batches[*batch_index].insert(current_job);
-                schedule.update_parameters(*batch_index);
             }
             Decision::CreateAt { batch_index, job_code } => {
                 validate_job_code(*job_code, &current_job);
@@ -42,6 +41,8 @@ pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job
                 panic!("NotPossible decision should not be executed");
             }
         }
+
+        schedule.update_parameters();
     }
 }
 
