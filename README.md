@@ -10,12 +10,12 @@ ds_sbo_rust/
 ├── Cargo.toml
 ├── README.md           ← this file
 ├── src/
-│   ├── main.rs         ← example binary: prints job list
+│   ├── main.rs         ← main binary: prints schedule list
 │   ├── lib.rs          ← library entry point
-│   ├── core/           ← scheduling model (Job, Batch, BatchSchedule, handlers)
-│   ├── greedy_dp/      ← cost-driven batching (helper, cost_calculator, solve)
+│   ├── core/           ← scheduling model (Job, Batch, BatchSchedule)
+│   ├── greedy_dp/      ← deviation-driven batching procedure
 │   └── resources/      ← job definitions for problem instances
-└── tests/              ← unit tests for each decision and cost function
+└── tests/              ← unit tests for each decision and deviation functions
 ```
 
 ## Modules
@@ -25,12 +25,11 @@ Defines the basic data structures:
 - `Job` – release/due dates, processing time, size  
 - `Batch` – groups jobs, computes release, processing, due metrics  
 - `BatchSchedule` – sequence of batches with rolling completion times  
-- `handlers` – logs and generic decision enums  
 
 ### greedy_dp  
 A cost-based approach:
-- `helper::locate_eligible_batch` – find candidate batch by due date  
-- `cost_calculator` – compute slack/lateness for inserting, creating before/after, end cases  
+- `deviation_calculator/` – finds deviation for all possible cases of insertion / creation
+- `execute` – executes the action corresponding to maximum deviation
 - `solve` – (stub) orchestrates repeated decisions across the schedule  
 
 ### resources  
