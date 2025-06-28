@@ -1,6 +1,6 @@
 use ds_sbo_rust::{
     greedy_dp::solve::solve,
-    resources::{problem1::problem1, problem2::problem2, problem3::problem3},
+    resources::{problem1::problem1, problem2::problem2, problem3::{self, problem3}},
     structures::BatchSchedule,
 };
 
