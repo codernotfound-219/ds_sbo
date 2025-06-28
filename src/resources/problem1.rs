@@ -1,4 +1,4 @@
-use crate::structures::{Batch, BatchSchedule, Job};
+use crate::structures::Job;
 
 fn job1() -> Job {
     Job::new(1, 1, 29, 9, 9)
