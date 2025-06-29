@@ -5,7 +5,7 @@ use ds_sbo_rust::{
 };
 
 fn main() {
-    
+
     let mut problem1 = problem1();
     let solution1: BatchSchedule = solve(&mut problem1);
     println!("{}", solution1);
