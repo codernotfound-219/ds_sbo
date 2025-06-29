@@ -26,7 +26,6 @@ pub fn get_active_logs_for_lp_job(
         return all_possibilities;
     }
 
-    // Try inserting at each position from batch_index onwards
     for index in batch_index..schedule.batches.len() {
         let current_prev_completion = calculate_prev_completion_for_lp_job(
             index,
@@ -36,6 +35,7 @@ pub fn get_active_logs_for_lp_job(
             completion_update,
         );
 
+        // Try inserting at each position from batch_index onwards
         let batch_possibilities = insert_displaced_job_at_batch(
             job,
             index,
@@ -43,8 +43,16 @@ pub fn get_active_logs_for_lp_job(
             current_prev_completion,
             completion_update,
         );
-
         all_possibilities.extend(batch_possibilities);
+
+        // Try creating a new batch at index
+        let creation_option = create_batch_at_index_for_lp_job(
+            job,
+            index,
+            schedule,
+            completion_update,
+        );
+        all_possibilities.push(vec![creation_option]);
     }
 
     //NOTE: add the option to create new batch at the end
@@ -52,6 +60,61 @@ pub fn get_active_logs_for_lp_job(
     all_possibilities.push(vec![end_option]);
 
     all_possibilities
+}
+
+fn create_batch_at_index_for_lp_job(
+    job: &Job,
+    batch_index: usize,
+    schedule: &BatchSchedule,
+    completion_update: CompletionUpdate,
+) -> ActiveLog {
+    let actual_prev_completion = if batch_index == 0 {
+        0
+    } else {
+        calculate_cascading_completion(batch_index - 1, schedule, completion_update)
+    };
+
+    let release_date = job.release_date.max(actual_prev_completion);
+    let completion = release_date + job.processing_time;
+    let current_deviation = job.due_date as i32 - completion as i32;
+
+    let net_deviation = calculate_deviation_with_virtual_creation(
+        batch_index,
+        schedule,
+        completion,
+        current_deviation,
+    );
+
+    ActiveLog::new(
+        net_deviation,
+        decisions::create_at(batch_index, job.code),
+    )
+}
+
+fn calculate_deviation_with_virtual_creation(
+    batch_index: usize,
+    schedule: &BatchSchedule,
+    new_batch_completion: u32,
+    current_deviation: i32,
+) -> i32 {
+    let mut aggregate = if current_deviation < 0 { current_deviation } else { 0 };
+    let mut deviation = current_deviation;
+    let mut completion = new_batch_completion;
+
+    for index in batch_index..schedule.batches.len() {
+        let batch = &schedule.batches[index];
+
+        let release_date = batch.release_date.max(completion);
+        completion = release_date + batch.processing_time;
+
+        let batch_deviation = batch.min_due_time as i32 - completion as i32;
+        if batch_deviation < 0 {
+            aggregate += batch_deviation;
+        }
+        deviation = deviation.min(batch_deviation);
+    }
+
+    if aggregate != 0 { aggregate } else { deviation }
 }
 
 // NOTE: Try insertion at the specified batch index for displaced jobs

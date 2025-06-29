@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test {
     use ds_sbo_rust::greedy_dp::get_insertion_deviations;
-    use ds_sbo_rust::structures::{Batch, BatchSchedule};
+    use ds_sbo_rust::structures::{Batch, BatchSchedule, Job};
     use ds_sbo_rust::greedy_dp::structures::LogHistory;
     use ds_sbo_rust::greedy_dp::Decision;
     use ds_sbo_rust::resources::problem1::*;
@@ -286,5 +286,51 @@ mod test {
         ];
 
         assert_eq!(set_m, solution);
+    }
+
+    #[test]
+    fn self_test() {
+        let job1 = Job {
+            code: 1,
+            release_date: 9,
+            processing_time: 6,
+            due_date: 21,
+            size: 10,
+        };
+        let job2 = Job {
+            code: 2,
+            release_date: 12,
+            processing_time: 4,
+            due_date: 32,
+            size: 9,
+        };
+        let job3 = Job {
+            code: 3,
+            release_date: 13,
+            processing_time: 5,
+            due_date: 42,
+            size: 9,
+        };
+        let tester = Job {
+            code: 4,
+            release_date: 14,
+            processing_time: 4,
+            due_date: 18,
+            size: 9,
+        };
+        
+        let mut batch1 = Batch::new(1);
+        let mut batch2 = Batch::new(2);
+
+        batch1.insert(job1);
+        batch1.insert(job2);
+        batch2.insert(job3);
+
+        let mut schedule = BatchSchedule::new();
+        schedule.insert_end(batch1);
+        schedule.insert_end(batch2);
+
+        let _insertion_list = get_insertion_deviations(&schedule, &tester);
+        assert_eq!(true, false);
     }
 }

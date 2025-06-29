@@ -32,7 +32,7 @@ pub fn handle_displacement_due_to_cur_job(
                 insertion_result.completion,
                 Some((batch_index, insertion_result.completion)),
             );
-            
+
             // Find the best possibility
             let (_best_deviation, best_logs) = find_best_possibility(recursive_possibilities);
             
