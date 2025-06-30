@@ -1,34 +1,49 @@
 use crate::structures::Job;
 
 pub fn job1() -> Job {
-    Job::new(1, 5, 28, 8, 8, Some(8))
+    Job::new(1, 5, 28, 8, 8)
 }
 pub fn job2() -> Job {
-    Job::new(2, 4, 21, 1, 7, Some(7))
+    Job::new(2, 4, 21, 1, 7)
 }
 pub fn job3() -> Job {
-    Job::new(3, 19, 25, 1, 8, Some(8)) // Cant use table anymore
+    Job::new(3, 19, 25, 1, 8)
 }
 pub fn job4() -> Job {
-    Job::new(4, 14, 39, 5, 6, Some(6))
+    Job::new(4, 14, 39, 5, 6)
 }
 pub fn job5() -> Job {
-    Job::new(5, 4, 41, 8, 8, Some(8))
+    Job::new(5, 4, 41, 8, 8)
 }
 pub fn job6() -> Job {
-    Job::new(6, 4, 39, 9, 9, Some(9))
+    Job::new(6, 4, 39, 9, 9)
 }
 pub fn job7() -> Job {
-    Job::new(7, 15, 42, 5, 9, Some(9))
+    Job::new(7, 15, 42, 5, 9)
 }
 pub fn job8() -> Job {
-    Job::new(8, 9, 21, 6, 6, Some(6))
+    Job::new(8, 9, 21, 6, 6)
 }
 pub fn job9() -> Job {
-    Job::new(9, 17, 39, 4, 9, Some(9))
+    Job::new(9, 17, 39, 4, 9)
 }
 pub fn job10() -> Job {
-    Job::new(10, 9, 19, 1, 7, Some(7))
+    Job::new(10, 9, 19, 1, 7)
+}
+pub fn job11() -> Job {
+    Job::new(11, 11, 22, 2, 5)
+}
+pub fn job12() -> Job {
+    Job::new(12, 8, 24, 5, 8)
+}
+pub fn job13() -> Job {
+    Job::new(13, 15, 40, 6, 6)
+}
+pub fn job14() -> Job {
+    Job::new(14, 18, 38, 7, 5)
+}
+pub fn job15() -> Job {
+    Job::new(15, 16, 41, 4, 6)
 }
 
 pub fn problem2() -> Vec<Job> {
@@ -43,5 +58,10 @@ pub fn problem2() -> Vec<Job> {
         job8(),
         job9(),
         job10(),
+        job11(),
+        job12(),
+        job13(),
+        job14(),
+        job15(),
     ]
 }
