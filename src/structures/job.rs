@@ -9,16 +9,18 @@ pub struct Job {
     pub due_date: u32,
     pub processing_time: u32,
     pub size: u32,
+    pub penalty: Option<u32>,
 }
 
 impl Job {
-    pub fn new(code: u32, rel: u32, due: u32, pt: u32, size: u32) -> Job {
+    pub fn new(code: u32, rel:u32, due: u32, pt: u32, size: u32, penalty: Option<u32>) -> Job {
         Job {
             code,
             release_date: rel,
             due_date: due,
             processing_time: pt,
             size,
+            penalty,
         }
     }
 
