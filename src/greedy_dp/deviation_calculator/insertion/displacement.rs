@@ -1,5 +1,6 @@
 use std::cmp::Ordering;
 
+use crate::resources::BATCH_CAPACITY;
 use crate::structures::{BatchSchedule, Job};
 use crate::greedy_dp::{LogHistory, ActiveLog, Decision};
 use crate::greedy_dp::deviation_calculator::common::{CompletionUpdate, decisions, compute_current_deviation};
@@ -13,6 +14,7 @@ pub fn handle_displacement_due_to_cur_job(
     current_prev_completion: u32,
     _completion_update: CompletionUpdate,
 ) -> LogHistory {
+    let batch = &schedule.batches[batch_index];
     let mut job_list: Vec<Job> = schedule.batches[batch_index].jobs.clone();
     let lp_job = job_list.pop().expect("Batch should not be empty");
 
@@ -22,6 +24,11 @@ pub fn handle_displacement_due_to_cur_job(
         }
         Ordering::Greater => {
             // Calculate deviation for inserting job in current batch (after removing lp_job)
+            let new_batch_size = batch.size - lp_job.size + job.size;
+            if new_batch_size > BATCH_CAPACITY {
+                // If the new batch size exceeds capacity, return not possible
+                return LogHistory::new(i32::MIN, vec![Decision::NotPossible]);
+            }
             let insertion_result = compute_current_deviation(&job_list, job, current_prev_completion);
             
             // Get ALL possible placements for the displaced job
@@ -57,6 +64,7 @@ pub fn handle_displacement_due_to_lp_job(
     prev_completion: u32,
     _completion_update: CompletionUpdate,
 ) -> Vec<Vec<ActiveLog>> {
+    let batch = &schedule.batches[batch_index];
     let mut job_list: Vec<Job> = schedule.batches[batch_index].jobs.clone();
     let lp_job = job_list.pop().expect("Batch should not be empty");
 
@@ -66,6 +74,11 @@ pub fn handle_displacement_due_to_lp_job(
             Vec::new()
         }
         Ordering::Greater => {
+            let new_batch_size = batch.size - lp_job.size + job.size;
+            if new_batch_size > BATCH_CAPACITY {
+                // If the new batch size exceeds capacity, return empty possibilities
+                return Vec::new();
+            }
             // Can displace - calculate deviation for current insertion
             let insertion_result = compute_current_deviation(&job_list, job, prev_completion);
             
