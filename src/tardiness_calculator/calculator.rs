@@ -23,7 +23,7 @@ fn helper(schedule: &BatchSchedule) -> Vec<Lateness> {
             let completion = job.due_date as i32 - batch.completion_time as i32;
 
             if completion < 0 {
-                late_job_list.push(Lateness::new(completion, job.code));
+                late_job_list.push(Lateness::new(completion.abs(), job.code));
             }
         }
     }

@@ -9,6 +9,7 @@ pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job
     let mut current_job = job;
     let mut prev_batch_index = schedule.batches.len().saturating_sub(1);
 
+    println!("=======================================");
     println!("Placing Job: J{}", job.code);
 
     for (i, action) in loghistory.actions.iter().enumerate() {
@@ -51,8 +52,6 @@ pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job
 
         schedule.update_parameters();
     }
-
-    println!("=======================================");
 }
 
 fn validate_job_code(expected_code: u32, job: &Job) {
