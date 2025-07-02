@@ -112,22 +112,36 @@ pub fn solution() -> BatchSchedule {
     let mut batch3 = Batch::new(3);
     let mut batch4 = Batch::new(4);
     let mut batch5 = Batch::new(5);
+    let mut batch6 = Batch::new(6);
+    let mut batch7 = Batch::new(7);
+    let mut batch8 = Batch::new(8);
+    let mut batch9 = Batch::new(9);
 
-    batch1.insert(job11());
-    batch1.insert(job6());
-    batch2.insert(job5());
-    batch2.insert(job8());
-    batch2.insert(job14());
-    batch3.insert(job15());
-    batch3.insert(job13());
-    batch3.insert(job9());
-    batch4.insert(job7());
-    batch4.insert(job3());
-    batch4.insert(job4());
-    batch4.insert(job1());
-    batch5.insert(job10());
-    batch5.insert(job12());
-    batch5.insert(job2());
+    batch1.insert(job18());
+    batch1.insert(job5());
+    batch1.insert(job19());
+    batch2.insert(job11());
+    batch2.insert(job22());
+    batch2.insert(job21());
+    batch3.insert(job24());
+    batch3.insert(job16());
+    batch4.insert(job9());
+    batch4.insert(job14());
+    batch4.insert(job8());
+    batch5.insert(job15());
+    batch5.insert(job6());
+    batch5.insert(job23());
+    batch6.insert(job13());
+    batch6.insert(job7());
+    batch6.insert(job3());
+    batch7.insert(job25());
+    batch7.insert(job4());
+    batch7.insert(job20());
+    batch8.insert(job17());
+    batch8.insert(job1());
+    batch8.insert(job10());
+    batch9.insert(job12());
+    batch9.insert(job2());
 
     let mut schedule = BatchSchedule::new();
     schedule.insert_end(batch1);
@@ -135,6 +149,10 @@ pub fn solution() -> BatchSchedule {
     schedule.insert_end(batch3);
     schedule.insert_end(batch4);
     schedule.insert_end(batch5);
+    schedule.insert_end(batch6);
+    schedule.insert_end(batch7);
+    schedule.insert_end(batch8);
+    schedule.insert_end(batch9);
 
     schedule
 }
