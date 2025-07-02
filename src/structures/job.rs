@@ -25,6 +25,10 @@ impl Job {
     pub fn sort_release_date(list: &mut [Job]) {
         list.sort_by_key(|job| Reverse(job.release_date));
     }
+
+    pub fn sort_due_date(list: &mut [Job]) {
+        list.sort_by_key(|job| Reverse(job.due_date));
+    }
 }
 
 impl Ord for Job {
