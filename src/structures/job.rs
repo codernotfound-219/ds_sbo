@@ -12,7 +12,7 @@ pub struct Job {
 }
 
 impl Job {
-    pub fn new(code: u32, rel:u32, due: u32, pt: u32, size: u32) -> Job {
+    pub(crate) fn new(code: u32, rel:u32, due: u32, pt: u32, size: u32) -> Job {
         Job {
             code,
             release_date: rel,
@@ -27,7 +27,14 @@ impl Job {
     }
 
     pub fn sort_due_date(list: &mut [Job]) {
+<<<<<<< HEAD
         list.sort_by_key(|job| Reverse(job.due_date));
+=======
+        list.sort_by(|a, b| {
+            Reverse(a.due_date).cmp(&Reverse(b.due_date))
+                .then(Reverse(a.code).cmp(&Reverse(b.code)))
+        });
+>>>>>>> greedy_dp
     }
 }
 
