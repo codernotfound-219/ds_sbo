@@ -10,7 +10,7 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
     let mut schedule = BatchSchedule::new();
     let mut batch = Batch::new(1);
 
-    Job::sort_release_date(list);
+    Job::sort_due_date(list);
     batch.insert(list.pop().unwrap());
     schedule.insert_begin(batch);
 

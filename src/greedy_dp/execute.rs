@@ -9,8 +9,8 @@ pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job
     let mut current_job = job;
     let mut prev_batch_index = schedule.batches.len().saturating_sub(1);
 
-    println!("=======================================");
-    println!("Placing Job: J{}", job.code);
+    // println!("=======================================");
+    // println!("Placing Job: J{}", job.code);
 
     for (i, action) in loghistory.actions.iter().enumerate() {
         if i > 0 {
@@ -21,28 +21,28 @@ pub fn execute_action(loghistory: &LogHistory, schedule: &mut BatchSchedule, job
             Decision::InsertIn { batch_index, job_code } => {
                 validate_job_code(*job_code, &current_job);
                 
-                println!("Inserting Job: J{} in Batch{}", job_code, batch_index+1);
+                // println!("Inserting Job: J{} in Batch{}", job_code, batch_index+1);
                 prev_batch_index = *batch_index;
                 schedule.batches[*batch_index].insert(current_job);
             }
             Decision::CreateAt { batch_index, job_code } => {
                 validate_job_code(*job_code, &current_job);
 
-                println!("Inserting Job: J{} in New Batch{}", job_code, batch_index+1);
+                // println!("Inserting Job: J{} in New Batch{}", job_code, batch_index+1);
                 let mut batch = Batch::new(batch_index + 1);
                 batch.insert(current_job);
                 schedule.insert_at_position(*batch_index, batch);
-                println!("=======================================");
+                // println!("=======================================");
                 return;
             }
             Decision::CreateEnd { job_code } => {
                 validate_job_code(*job_code, &current_job);
-                
-                println!("Inserting Job: J{} in New End Batch", job_code);
+
+                // println!("Inserting Job: J{} in New End Batch", job_code);
                 let mut batch = Batch::new(schedule.batches.len() + 1);
                 batch.insert(current_job);
                 schedule.insert_end(batch);
-                println!("=======================================");
+                // println!("=======================================");
                 return;
             }
             Decision::NotPossible => {
