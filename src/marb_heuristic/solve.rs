@@ -12,7 +12,7 @@ pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
     let mut batch_indexer = 1;
 
     while !list.is_empty() {
-        let formed_batches: Vec<MarbBatch> = solver_helper_1(list.clone());
+        let formed_batches: Vec<MarbBatch> = solver_helper_1(list.clone())?;
         let priority_batch = compute_min_due_date(&formed_batches);
         
         let mut batch = Batch::new(batch_indexer);
@@ -29,13 +29,14 @@ pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
     }
 
     let tardiness3 = get_tardiness(&schedule);
+    let duration = start.elapsed().as_nanos();
 
     println!();
     println!("Solving using MARB Heuristic: ");
     println!();
     println!("------------------------------------");
     println!("total tardiness: {}", tardiness3);
-    println!("computation time: {} ns", start.elapsed().as_nanos());
+    println!("computation time: {} ns", duration);
     println!("------------------------------------");
     println!();
     Ok(schedule)
@@ -70,9 +71,9 @@ fn compute_min_due_date(list: &[MarbBatch]) -> usize {
     priority_index
 }
 
-pub fn solver_helper_1(mut list: Vec<Job>) -> Vec<MarbBatch> {
+pub fn solver_helper_1(mut list: Vec<Job>) -> Result<Vec<MarbBatch>, Box<dyn Error>> {
     if list.is_empty() {
-        panic!("Empty SLUJ passed to solver");
+        return Err("Empty SLUJ passed to solver".into());
     }
 
     let mut formed_batches: Vec<MarbBatch> = Vec::new();
@@ -89,7 +90,7 @@ pub fn solver_helper_1(mut list: Vec<Job>) -> Vec<MarbBatch> {
         solver_helper(&mut formed_batches, list.pop().unwrap());
     }
 
-    formed_batches
+    Ok(formed_batches)
 }
 
 fn solver_helper(formed_batches: &mut Vec<MarbBatch>, job: Job) {
@@ -152,7 +153,7 @@ mod test {
 
     #[test]
     fn final_test() {
-        let result = solver_helper_1(problem3());
+        let result = solver_helper_1(problem3()).ok().unwrap();
         let job1 = job1();
         let job2 = job2();
         let job3 = job3();

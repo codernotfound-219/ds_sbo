@@ -25,13 +25,14 @@ pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
     }
 
     let tardiness3 = get_tardiness(&schedule);
+    let duration = start.elapsed().as_nanos();
 
     println!();
     println!("Solving using Greedy-DP: ");
     println!();
     println!("------------------------------------");
     println!("total tardiness: {}", tardiness3);
-    println!("computation time: {} ns", start.elapsed().as_nanos());
+    println!("computation time: {} ns", duration);
     println!("------------------------------------");
     println!();
 
