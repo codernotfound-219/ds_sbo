@@ -111,13 +111,13 @@ cargo --version
 
 For more installation options and details, visit [rustup.rs](https://rustup.rs/).
 
-### Clone the repository
+### Step 1: Clone the repository
 
 ```bash
 git clone https://github.com/codernotfound-219/ds_sbo.git
 ```
 
-### Building and Running
+### Step 2: Building and Running
 
 Build the library:
 
