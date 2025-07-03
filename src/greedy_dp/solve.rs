@@ -1,11 +1,16 @@
+use std::error::Error;
+use std::time::Instant;
 use crate::structures::{Batch, BatchSchedule, Job};
+use crate::tardiness_calculator::get_tardiness;
 
 use super::helper::solver_helper;
 
-pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
+pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
     if list.is_empty() {
-        panic!("Empty SLUJ passed to solver");
+        return Err("Empty list of jobs passed to solver".into());
     }
+
+    let start = Instant::now();
 
     let mut schedule = BatchSchedule::new();
     let mut batch = Batch::new(1);
@@ -19,5 +24,16 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
         solver_helper(&mut schedule, list.pop().unwrap());
     }
 
-    schedule
+    let tardiness3 = get_tardiness(&schedule);
+
+    println!();
+    println!("Solving using Greedy-DP: ");
+    println!();
+    println!("------------------------------------");
+    println!("total tardiness: {}", tardiness3);
+    println!("computation time: {} ns", start.elapsed().as_nanos());
+    println!("------------------------------------");
+    println!();
+
+    Ok(schedule)
 }

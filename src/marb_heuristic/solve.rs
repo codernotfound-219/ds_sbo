@@ -1,8 +1,13 @@
+use std::error::Error;
+use std::time::Instant;
 use crate::resources::BATCH_CAPACITY;
 use crate::structures::{Job, Batch, BatchSchedule};
 use super::structure::MarbBatch;
+use crate::tardiness_calculator::get_tardiness;
 
-pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
+pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
+    let start = Instant::now();
+
     let mut schedule: BatchSchedule = BatchSchedule::new();
     let mut batch_indexer = 1;
 
@@ -16,14 +21,24 @@ pub fn solve(list: &mut Vec<Job>) -> BatchSchedule {
             if let Some(list_index) = find_job(list, job) {
                 list.remove(list_index);
             } else {
-                panic!("Could not find the job from batch in main list!");
+                return Err("Could not find the job from batch in main list!".into());
             }
             batch.insert(*job);
         }
         schedule.insert_end(batch);
     }
 
-    schedule
+    let tardiness3 = get_tardiness(&schedule);
+
+    println!();
+    println!("Solving using MARB Heuristic: ");
+    println!();
+    println!("------------------------------------");
+    println!("total tardiness: {}", tardiness3);
+    println!("computation time: {} ns", start.elapsed().as_nanos());
+    println!("------------------------------------");
+    println!();
+    Ok(schedule)
 }
 
 fn find_job(list: &[Job], job: &Job) -> Option<usize> {
