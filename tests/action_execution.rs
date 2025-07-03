@@ -236,7 +236,7 @@ mod test {
 
         execute_action(best_action, &mut schedule, tester);
 
-        let solution = greed_dp_solution();
+        let solution = solution();
 
         assert_eq!(schedule, solution);
     }
