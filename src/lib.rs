@@ -60,8 +60,8 @@ impl Config {
     pub fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
         args.next();
 
-        let solver_str = args.next().ok_or("Could not read solver name")?;
-        let problem_str = args.next().ok_or("Could not read problem number")?;
+        let solver_str = args.next().ok_or("Could not read solver name. Check the README.md file for correct usage.")?;
+        let problem_str = args.next().ok_or("Could not read problem number. Check the README.md file for correct usage.")?;
 
         let flag = match args.next() {
             Some(arg) => {
@@ -77,8 +77,8 @@ impl Config {
             return Err("Unsupported parameters")
         }
 
-        let solver = Solver::from_str(&solver_str).ok_or("Invalid Solver Name")?;
-        let problem = Problem::from_str(&problem_str).ok_or("Invalid Problem Name")?;
+        let solver = Solver::from_str(&solver_str).ok_or("Invalid Solver Name. Check the README.md file for correct usage.")?;
+        let problem = Problem::from_str(&problem_str).ok_or("Invalid Problem Name. Check the README.md file for correct usage.")?;
 
         Ok ( Config {
             solver,

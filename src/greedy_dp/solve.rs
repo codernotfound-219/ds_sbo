@@ -21,7 +21,7 @@ pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
 
     loop {
         if list.is_empty() { break; }
-        solver_helper(&mut schedule, list.pop().unwrap());
+        solver_helper(&mut schedule, list.pop().unwrap())?;
     }
 
     let tardiness3 = get_tardiness(&schedule);
