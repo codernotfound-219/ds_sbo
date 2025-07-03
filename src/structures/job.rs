@@ -27,14 +27,14 @@ impl Job {
     }
 
     pub fn sort_due_date(list: &mut [Job]) {
-<<<<<<< HEAD
         list.sort_by_key(|job| Reverse(job.due_date));
-=======
+    }
+
+    pub fn sort_due_date_by_code(list: &mut [Job]) {
         list.sort_by(|a, b| {
             Reverse(a.due_date).cmp(&Reverse(b.due_date))
                 .then(Reverse(a.code).cmp(&Reverse(b.code)))
         });
->>>>>>> greedy_dp
     }
 }
 

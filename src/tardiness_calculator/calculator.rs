@@ -7,10 +7,10 @@ pub fn get_tardiness(schedule: &BatchSchedule) -> i32 {
 
     for each_lateness in late_list {
         aggregate += each_lateness.lateness;
-        println!(
-            "J{} is late by: {}",
-            each_lateness.job_code, each_lateness.lateness
-        );
+        // println!(
+        //     "J{} is late by: {}",
+        //     each_lateness.job_code, each_lateness.lateness
+        // );
     }
 
     aggregate

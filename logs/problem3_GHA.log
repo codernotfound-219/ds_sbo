@@ -1,0 +1,78 @@
+Solving problem3 using GHA....
+BatchSchedule:
+    Batch_Code: 1
+    Batch_Jobs: J18, J5, J19
+    Batch_release: 7
+    Batch_processing: 1
+    Batch_completion: 8
+    Batch_min_due_date: 10
+    Batch_size: 18
+
+    Batch_Code: 2
+    Batch_Jobs: J11, J22, J21
+    Batch_release: 8
+    Batch_processing: 7
+    Batch_completion: 15
+    Batch_min_due_date: 13
+    Batch_size: 17
+
+    Batch_Code: 3
+    Batch_Jobs: J24, J16
+    Batch_release: 15
+    Batch_processing: 2
+    Batch_completion: 17
+    Batch_min_due_date: 17
+    Batch_size: 20
+
+    Batch_Code: 4
+    Batch_Jobs: J14, J9, J8
+    Batch_release: 18
+    Batch_processing: 7
+    Batch_completion: 25
+    Batch_min_due_date: 24
+    Batch_size: 19
+
+    Batch_Code: 5
+    Batch_Jobs: J15, J6, J23
+    Batch_release: 25
+    Batch_processing: 9
+    Batch_completion: 34
+    Batch_min_due_date: 26
+    Batch_size: 18
+
+    Batch_Code: 6
+    Batch_Jobs: J13, J7, J3
+    Batch_release: 34
+    Batch_processing: 10
+    Batch_completion: 44
+    Batch_min_due_date: 29
+    Batch_size: 18
+
+    Batch_Code: 7
+    Batch_Jobs: J25, J4, J20
+    Batch_release: 44
+    Batch_processing: 9
+    Batch_completion: 53
+    Batch_min_due_date: 38
+    Batch_size: 20
+
+    Batch_Code: 8
+    Batch_Jobs: J17, J1, J10
+    Batch_release: 53
+    Batch_processing: 2
+    Batch_completion: 55
+    Batch_min_due_date: 40
+    Batch_size: 18
+
+    Batch_Code: 9
+    Batch_Jobs: J12, J2
+    Batch_release: 55
+    Batch_processing: 10
+    Batch_completion: 65
+    Batch_min_due_date: 45
+    Batch_size: 16
+
+
+total tardiness: 161
+computation time: 217041 ns
+

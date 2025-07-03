@@ -1,0 +1,101 @@
+Solving problem3 using Greedy-DP....
+BatchSchedule:
+    Batch_Code: 1
+    Batch_Jobs: J11, J22
+    Batch_release: 3
+    Batch_processing: 7
+    Batch_completion: 10
+    Batch_min_due_date: 13
+    Batch_size: 13
+
+    Batch_Code: 2
+    Batch_Jobs: J18
+    Batch_release: 10
+    Batch_processing: 1
+    Batch_completion: 11
+    Batch_min_due_date: 10
+    Batch_size: 4
+
+    Batch_Code: 3
+    Batch_Jobs: J24, J16
+    Batch_release: 11
+    Batch_processing: 2
+    Batch_completion: 13
+    Batch_min_due_date: 17
+    Batch_size: 20
+
+    Batch_Code: 4
+    Batch_Jobs: J21, J5, J14
+    Batch_release: 13
+    Batch_processing: 5
+    Batch_completion: 18
+    Batch_min_due_date: 20
+    Batch_size: 17
+
+    Batch_Code: 5
+    Batch_Jobs: J9, J8, J15
+    Batch_release: 18
+    Batch_processing: 9
+    Batch_completion: 27
+    Batch_min_due_date: 24
+    Batch_size: 19
+
+    Batch_Code: 6
+    Batch_Jobs: J6, J13
+    Batch_release: 27
+    Batch_processing: 8
+    Batch_completion: 35
+    Batch_min_due_date: 28
+    Batch_size: 18
+
+    Batch_Code: 7
+    Batch_Jobs: J19
+    Batch_release: 35
+    Batch_processing: 1
+    Batch_completion: 36
+    Batch_min_due_date: 30
+    Batch_size: 6
+
+    Batch_Code: 8
+    Batch_Jobs: J23, J7, J25
+    Batch_release: 36
+    Batch_processing: 10
+    Batch_completion: 46
+    Batch_min_due_date: 33
+    Batch_size: 17
+
+    Batch_Code: 9
+    Batch_Jobs: J3, J4, J17
+    Batch_release: 46
+    Batch_processing: 7
+    Batch_completion: 53
+    Batch_min_due_date: 38
+    Batch_size: 18
+
+    Batch_Code: 10
+    Batch_Jobs: J1, J20, J10
+    Batch_release: 53
+    Batch_processing: 2
+    Batch_completion: 55
+    Batch_min_due_date: 42
+    Batch_size: 16
+
+    Batch_Code: 11
+    Batch_Jobs: J12
+    Batch_release: 55
+    Batch_processing: 9
+    Batch_completion: 64
+    Batch_min_due_date: 45
+    Batch_size: 7
+
+    Batch_Code: 12
+    Batch_Jobs: J2
+    Batch_release: 64
+    Batch_processing: 10
+    Batch_completion: 74
+    Batch_min_due_date: 55
+    Batch_size: 9
+
+
+Total Tardiness: 175
+computation time: 315083 ns

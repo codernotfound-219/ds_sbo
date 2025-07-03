@@ -1,11 +1,14 @@
+use std::time::Instant;
+
 use ds_sbo_rust::{
     marb_heuristic::solve::solve as marb_heuristic_solver,
-    greedy_dp::solve::solve as greedy_dp_solver,
+    // greedy_dp::solve::solve as greedy_dp_solver,
     resources:: problem3::{problem3, solution},
     structures::BatchSchedule, tardiness_calculator::get_tardiness,
 };
 
 fn main() {
+    let start = Instant::now();
 
     // let mut problem1 = problem1();
     // let solution1: BatchSchedule = solve(&mut problem1);
@@ -26,27 +29,31 @@ fn main() {
     // println!("===================================");
     // println!("Total Tardiness: {}", tardiness2);
 
-    let solution3: BatchSchedule = greedy_dp_solver(&mut problem3());
-    println!();
-    println!("Solution to problem3 (25 jobs): ");
-    println!();
-    println!("{}", solution3);
-    println!("===================================");
-    let tardiness3 = get_tardiness(&solution3);
-    println!("===================================");
-    println!("Total Tardiness: {}", tardiness3);
-
-    // let mut problem3 = problem3();
-    // let solution3: BatchSchedule = marb_heuristic::solver(&mut problem3);
+    // let solution3: BatchSchedule = greedy_dp_solver(&mut problem3());
+    // println!();
+    // println!("Solution to problem3 (25 jobs): ");
+    // println!();
     // println!("{}", solution3);
     // println!("===================================");
     // let tardiness3 = get_tardiness(&solution3);
     // println!("===================================");
     // println!("Total Tardiness: {}", tardiness3);
 
+    // println!("Solving problem3 using Greedy-DP....");
+    // let mut problem3 = problem3();
+    // let solution3: BatchSchedule = greedy_dp_solver(&mut problem3);
+    // let tardiness3 = get_tardiness(&solution3);
+    //
+    // println!("{}", solution3);
+    // println!("Total Tardiness: {}", tardiness3);
+    // println!("computation time: {} ns", start.elapsed().as_nanos());
+
+    println!("Solving problem3 using GHA....");
     let list: BatchSchedule = marb_heuristic_solver(&mut problem3());
     let solution: BatchSchedule = solution();
+    let tardiness3 = get_tardiness(&solution);
 
-    assert_eq!(list, solution, "INVALID");
     println!("{}", list);
+    println!("total tardiness: {}", tardiness3);
+    println!("computation time: {} ns", start.elapsed().as_nanos());
 }

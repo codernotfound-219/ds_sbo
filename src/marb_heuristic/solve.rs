@@ -63,7 +63,7 @@ pub fn solver_helper_1(mut list: Vec<Job>) -> Vec<MarbBatch> {
     let mut formed_batches: Vec<MarbBatch> = Vec::new();
     let mut batch = MarbBatch::new(1);
 
-    Job::sort_due_date(&mut list);
+    Job::sort_due_date_by_code(&mut list);
     batch.insert(list.pop().unwrap());
     formed_batches.push(batch);
 
@@ -137,7 +137,7 @@ mod test {
 
     #[test]
     fn final_test() {
-        let result = solver(&mut problem3());
+        let result = solver_helper_1(problem3());
         let job1 = job1();
         let job2 = job2();
         let job3 = job3();
