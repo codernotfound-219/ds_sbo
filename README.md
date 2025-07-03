@@ -1,4 +1,4 @@
-# ds_sbo_rust
+# Dynamic Scheduling of Single Burn-In Oven (ds-sbo)
 
 A Rust library and binary implementing batch scheduling algorithms to minimize total tardiness.  
 It provides two scheduling algorithms (`greedy_dp` and `marb_heuristic`), core data structures, and comprehensive test utilities.
@@ -14,7 +14,7 @@ This project implements two distinct approaches to batch scheduling:
 ## Project Structure
 
 ```text
-ds_sbo_rust/
+ds_sbo/
 ├── Cargo.toml
 ├── README.md                    ← this file
 ├── logs/                        ← algorithm execution logs
@@ -111,14 +111,19 @@ cargo --version
 
 For more installation options and details, visit [rustup.rs](https://rustup.rs/).
 
-### Building and Running
-
-Build the library and run tests:
+### Clone the repository
 
 ```bash
-cd ds_sbo_rust
+git clone https://github.com/codernotfound-219/ds_sbo.git
+```
+
+### Building and Running
+
+Build the library:
+
+```bash
+cd ds_sbo
 cargo build
-cargo test
 ```
 
 Run the binary with specific solver and problem:
@@ -139,7 +144,7 @@ cargo run marb problem2 -v
 The binary accepts the following arguments:
 
 ```text
-ds_sbo_rust <SOLVER> <PROBLEM> [FLAG]
+cargo run <SOLVER> <PROBLEM> [FLAG]
 ```
 
 - `SOLVER`: `marb` or `gdp`
