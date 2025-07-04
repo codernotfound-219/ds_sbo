@@ -1,6 +1,12 @@
 use std::fmt;
 use crate::structures::Job;
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct EligibleBatch {
+    pub index: usize,
+    pub attribute_ratio: f64,
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct MarbBatch {
     pub code: usize,

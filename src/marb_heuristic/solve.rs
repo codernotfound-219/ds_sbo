@@ -1,9 +1,15 @@
 use std::error::Error;
 use std::time::Instant;
-use crate::resources::BATCH_CAPACITY;
-use crate::structures::{Job, Batch, BatchSchedule};
-use super::structure::MarbBatch;
-use crate::tardiness_calculator::get_tardiness;
+
+use crate::{
+    structures::{Job, Batch, BatchSchedule},
+    tardiness_calculator::get_tardiness,
+};
+use super::{
+    structure::MarbBatch,
+    helper::{compute_min_due_date, find_job},
+    execute::get_formed_batches,
+};
 
 pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
     let start = Instant::now();
@@ -12,7 +18,7 @@ pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
     let mut batch_indexer = 1;
 
     while !list.is_empty() {
-        let formed_batches: Vec<MarbBatch> = solver_helper_1(list.clone())?;
+        let formed_batches: Vec<MarbBatch> = get_formed_batches(list.clone())?;
         let priority_batch = compute_min_due_date(&formed_batches);
         
         let mut batch = Batch::new(batch_indexer);
@@ -42,118 +48,16 @@ pub fn solve(list: &mut Vec<Job>) -> Result<BatchSchedule, Box<dyn Error>> {
     Ok(schedule)
 }
 
-fn find_job(list: &[Job], job: &Job) -> Option<usize> {
-    for (i, each_job) in list.iter().enumerate() {
-        if each_job == job {
-            return Some(i);
-        }
-    }
-
-    None
-}
-
-fn compute_min_due_date(list: &[MarbBatch]) -> usize {
-    let mut min_due_date = u32::MAX;
-    let mut priority_index = 0;
-
-    for (index, batch) in list.iter().enumerate() {
-        let mut cur_due_date = u32::MAX;
-        for job in batch.jobs.iter() {
-            cur_due_date = cur_due_date.min(job.due_date);
-        }
-
-        if min_due_date > cur_due_date {
-            min_due_date = cur_due_date;
-            priority_index = index;
-        }
-    }
-
-    priority_index
-}
-
-pub fn solver_helper_1(mut list: Vec<Job>) -> Result<Vec<MarbBatch>, Box<dyn Error>> {
-    if list.is_empty() {
-        return Err("Empty SLUJ passed to solver".into());
-    }
-
-    let mut formed_batches: Vec<MarbBatch> = Vec::new();
-    let mut batch = MarbBatch::new(1);
-
-    Job::sort_due_date_by_code(&mut list);
-    batch.insert(list.pop().unwrap());
-    formed_batches.push(batch);
-
-    loop {
-        if list.is_empty() {
-            break;
-        }
-        solver_helper(&mut formed_batches, list.pop().unwrap());
-    }
-
-    Ok(formed_batches)
-}
-
-fn solver_helper(formed_batches: &mut Vec<MarbBatch>, job: Job) {
-    let eligible_batches: Vec<EligibleBatch> = get_eligible_batches(formed_batches, job.size);
-
-    let mut min_ar = f64::MAX;
-    let mut min_ar_index: usize = usize::MAX;
-
-    for batch in eligible_batches {
-        let new_ar = get_new_attribute_ratio(&formed_batches[batch.index], &job);
-        if new_ar < batch.attribute_ratio && min_ar > new_ar {
-            min_ar = new_ar;
-            min_ar_index = batch.index;
-        }
-    }
-
-    if min_ar == f64::MAX {
-        let mut batch = MarbBatch::new(formed_batches.len() + 1);
-        batch.insert(job);
-        formed_batches.push(batch);
-        return;
-    }
-
-    formed_batches[min_ar_index].insert(job);
-}
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-struct EligibleBatch {
-    index: usize,
-    attribute_ratio: f64,
-}
-
-fn get_eligible_batches(formed_batches: &[MarbBatch], size: u32) -> Vec<EligibleBatch> {
-    let mut result: Vec<EligibleBatch> = Vec::new();
-    for (i, batch) in formed_batches.iter().enumerate() {
-        if BATCH_CAPACITY - batch.size >= size {
-            result.push(EligibleBatch {
-                index: i,
-                attribute_ratio: get_attribute_ratio(batch),
-            });
-        }
-    }
-
-    result
-}
-
-fn get_attribute_ratio(batch: &MarbBatch) -> f64 {
-    batch.processing_time as f64 / batch.jobs.len() as f64
-}
-
-fn get_new_attribute_ratio(batch: &MarbBatch, job: &Job) -> f64 {
-    let processing_time = batch.processing_time.max(job.processing_time) as f64;
-    processing_time / (batch.jobs.len() as f64 + 1.0)
-}
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use crate::marb_heuristic::execute::get_formed_batches;
+    use crate::marb_heuristic::structure::MarbBatch;
     use crate::resources::problem3::*;
 
     #[test]
     fn final_test() {
-        let result = solver_helper_1(problem3()).ok().unwrap();
+        let result = get_formed_batches(problem3()).ok().unwrap();
         let job1 = job1();
         let job2 = job2();
         let job3 = job3();
