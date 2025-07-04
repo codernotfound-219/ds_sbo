@@ -33,8 +33,11 @@ ds_sbo/
 │   │   ├── solve.rs             ← main solver orchestration
 │   │   └── structures.rs        ← algorithm-specific data structures
 │   ├── marb_heuristic/          ← MARB (Modified Attribute Ratio Based) heuristic
+│   │   ├── calculators.rs       ← attribute ratio calculations
+│   │   ├── execute.rs           ← main execution logic for batch formation
+│   │   ├── helper.rs            ← utility functions for job finding and batch selection
 │   │   ├── solve.rs             ← main MARB solver implementation
-│   │   └── structure.rs         ← MARB-specific batch structure
+│   │   └── structure.rs         ← MARB-specific data structures (MarbBatch, EligibleBatch)
 │   ├── tardiness_calculator/    ← tardiness computation utilities
 │   └── resources/               ← job definitions for problem instances
 │       ├── problem1.rs          ← 10-job problem instance
@@ -72,8 +75,11 @@ A deviation-based approach that uses dynamic programming concepts:
 
 Modified Attribute Ratio Based heuristic algorithm:
 
-- `solve` – main MARB solver with attribute ratio calculations
-- `structure` – specialized MarbBatch structure for the heuristic
+- `calculators` – attribute ratio computation functions
+- `execute` – main execution logic for batch formation and job placement
+- `helper` – utility functions for job finding and batch selection based on due dates
+- `solve` – orchestrates the complete MARB solving process
+- `structure` – specialized data structures (MarbBatch, EligibleBatch)
 
 ### tardiness_calculator
 
